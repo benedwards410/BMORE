@@ -1,0 +1,20 @@
+{
+  "name": "md-watch",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MD Watch: collects Maryland news and posts, drafts Drudge-style entries, and publishes them only after a person approves each one.",
+  "scripts": {
+    "fetch": "node fetch_feeds.js",
+    "draft": "node write_entries.js",
+    "review": "node publish_review.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.128.0",
+    "better-sqlite3": "13.0.3",
+    "rss-parser": "3.13.0"
+  }
+}

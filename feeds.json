@@ -1,0 +1,67 @@
+{
+  "settings": {
+    "request_timeout_ms": 15000,
+    "concurrency": 4,
+    "user_agent": "MD-Watch/1.0 (local news aggregator)",
+    "x_max_posts": 20
+  },
+  "feeds": [
+    { "name": "Maryland Matters", "url": "https://marylandmatters.org/feed/", "type": "news_org" },
+    { "name": "Capital News Service", "url": "https://cnsmaryland.org/feed/", "type": "news_org" },
+    { "name": "The Daily Record", "url": "https://thedailyrecord.com/feed/", "type": "news_org" },
+    { "name": "WBAL-TV 11", "url": "https://www.wbaltv.com/topstories-rss", "type": "news_org" },
+    { "name": "Baltimore Brew", "url": "https://baltimorebrew.com/feed/", "type": "independent" },
+    { "name": "Baltimore Fishbowl", "url": "https://baltimorefishbowl.com/feed/", "type": "independent" },
+    { "name": "r/baltimore", "url": "https://www.reddit.com/r/baltimore/.rss", "type": "citizen_commentary" },
+    { "name": "r/maryland", "url": "https://www.reddit.com/r/maryland/.rss", "type": "citizen_commentary" },
+    { "name": "Wes Moore", "url": "https://x.com/iamwesmoore", "type": "campaign_official" },
+    { "name": "Dan Cox", "url": "https://x.com/REPLACE-WITH-HANDLE", "type": "campaign_official", "enabled": false },
+    { "name": "Maryland reporter (template)", "url": "https://x.com/REPLACE-WITH-HANDLE", "type": "reporter", "enabled": false },
+    { "name": "WeRateDogs", "url": "https://x.com/dog_rates", "type": "relief" },
+    { "name": "r/rarepuppers", "url": "https://www.reddit.com/r/rarepuppers/.rss", "type": "relief" },
+    { "name": "Prank / social-experiment creator (template)", "url": "https://x.com/REPLACE-WITH-HANDLE", "type": "relief", "enabled": false }
+  ],
+  "categories": {
+    "politicians": [
+      "governor", "lieutenant governor", "Wes Moore", "Aruna Miller", "Dan Cox",
+      "mayor", "Brandon Scott", "city council", "county council", "council member", "councilmember",
+      "council president", "Zeke Cohen", "county executive", "Kathy Klausmeier", "Aisha Braveboy",
+      "Marc Elrich", "Steuart Pittman", "Calvin Ball",
+      "General Assembly", "House of Delegates", "delegate", "state senator", "senator", "lawmaker",
+      "legislator", "legislature", "legislation", "Bill Ferguson", "Adrienne Jones",
+      "comptroller", "Brooke Lierman", "attorney general", "Anthony Brown", "Board of Public Works",
+      "State House", "veto",
+      "Congress", "congressional", "congressman", "congresswoman", "Chris Van Hollen", "Angela Alsobrooks",
+      "Kweisi Mfume", "Jamie Raskin", "Andy Harris", "Steny Hoyer", "Glenn Ivey", "Sarah Elfreth",
+      "Johnny Olszewski", "April McClain Delaney",
+      "election", "candidate", "campaign", "ballot", "voter", "voting", "politician", "political",
+      "Republican", "Democrat*", "GOP"
+    ],
+    "crime": [
+      "crime", "criminal", "police", "shooting", "gunfire", "gunman", "gunpoint", "gunshot", "gun violence",
+      "homicide", "murder*", "manslaughter", "killed", "killing", "stabbing", "stabbed",
+      "robbery", "robbed", "carjack*", "burglary", "burglar*", "theft", "shoplifting", "assault*",
+      "arrest*", "charged with", "indicted", "indictment", "convicted", "sentenced", "pleaded guilty",
+      "suspect*", "state's attorney", "prosecutor", "sheriff", "detective", "jail", "prison", "inmate",
+      "juvenile justice", "fraud", "scam*", "drug trafficking"
+    ],
+    "education": [
+      "school", "student", "teacher", "principal", "classroom", "education", "educator",
+      "school board", "board of education", "superintendent", "Blueprint for Maryland's Future", "Kirwan",
+      "public schools", "City Schools", "BCPS", "MCPS", "PGCPS", "AACPS", "HCPSS", "charter school",
+      "curriculum", "kindergarten", "pre-K", "prekindergarten", "graduation", "literacy", "test scores",
+      "MCAP", "enrollment", "absenteeism", "school bus",
+      "college", "community college", "university", "tuition", "campus",
+      "UMBC", "Morgan State", "Towson University", "Coppin State"
+    ],
+    "cost_of_living": [
+      "cost of living", "affordab*", "inflation", "prices", "price increase", "price hike",
+      "rate increase", "rate hike", "rent*", "tenant", "landlord", "eviction", "housing", "home prices",
+      "mortgage", "property tax", "tax", "taxpayer", "tax credit", "tolls", "bus fare", "transit fares",
+      "gas prices", "grocery", "food prices", "food bank", "food insecurity", "SNAP benefits", "food stamps",
+      "utility", "BGE", "Pepco", "electric bill", "energy bill", "energy costs", "electricity rates",
+      "water bill", "water rates", "minimum wage", "wages", "paycheck", "layoff*", "unemployment", "jobless",
+      "child care", "childcare", "health insurance", "insurance premiums"
+    ]
+  }
+}
