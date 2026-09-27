@@ -118,7 +118,7 @@ function showEntry(entry, position, total, alreadyPublished, ui) {
   print(rule('='));
   print(`${bold(categoryLabel(entry.category).toUpperCase())}  ${dim(`entry ${position} of ${total}, ${entry.item_count} item(s), ${entry.highlights.length} highlight(s)`)}`);
   print(rule('='));
-  print(bold(field === 'setup_line' ? 'Setup line' : 'Inference paragraph (interpretation)'));
+  print(bold(field === 'setup_line' ? 'Setup line' : 'Intro'));
   print(wrap(entry[field], width, '  '));
   print('');
   print(bold('Highlights'));
@@ -179,7 +179,7 @@ async function editEntry(entry, ask, ui) {
   const record = (field, from, to) => changes.push({ field, from, to });
   for (;;) {
     const field = introField(entry);
-    const fieldLabel = field === 'setup_line' ? 'setup line' : 'inference paragraph';
+    const fieldLabel = field === 'setup_line' ? 'setup line' : 'intro';
     const options = [
       {
         label: `${fieldLabel.charAt(0).toUpperCase()}${fieldLabel.slice(1)}: ${short(entry[field])}`,

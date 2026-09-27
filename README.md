@@ -117,7 +117,7 @@ than the script directory.
 - `pending_items.json` — the current batch, grouped by category, with the source
   name, type and handle on every item.
 - `draft_entries.json` — one draft entry per category: `inference_paragraph`
-  (or `setup_line` for relief), 2–3 `highlights` (each with `headline`,
+  (the terse intro; `setup_line` for relief), 2–3 `highlights` (each with `headline`,
   `context_line`, `link`), the full list of `sources`, anything `left_out` and
   why, `review_flags` a person should look at, a `markdown` rendering, and the
   `review` decision once made.

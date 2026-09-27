@@ -87,7 +87,7 @@ test('writes one entry per category with the required highlight formats, links a
   assert.deepEqual(drafts.covered_item_ids.sort(), ['c1', 'c2', 'p1', 'p2', 'p3', 'p4', 'p5', 'r1', 'r2', 'r3']);
 
   const politics = drafts.entries.politicians;
-  assert.match(politics.inference_paragraph, /^Put together/);
+  assert.match(politics.inference_paragraph, /^Politicians\? Heating up\./);
   assert.ok(!('setup_line' in politics));
   assert.equal(politics.review, null);
   assert.deepEqual(politics.left_out.map((i) => [i.item_id, i.reason]), [

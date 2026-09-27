@@ -46,8 +46,8 @@ function fakeClaude({ misquoteFirst = [], refuse = [] } = {}) {
         };
       });
     const intro = relief
-      ? 'And now, a breather: the animals are winning today.'
-      : `Put together, these ${items.length} items suggest ${section.toLowerCase()} is heating up. Side by side, they point to the same pressure points.`;
+      ? 'Okay. Breathe. The dogs have the floor.'
+      : `${section}? Heating up. ${items.length} items, one theme: nobody has answers. Read on.`;
     return {
       model: params.model,
       stop_reason: 'end_turn',
