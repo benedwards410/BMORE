@@ -1,0 +1,10 @@
+{
+  "metadata": {"resultSet": {"count": 1}},
+  "results": [
+    {"sku": "6505727", "names": {"title": "Sony - WH-1000XM6 Wireless Noise Canceling Headphones - Black"},
+     "offers": [
+       {"condition": "excellent", "prices": {"current": 319.99, "regular": 449.99}},
+       {"condition": "fair", "prices": {"current": 289.99, "regular": 449.99}}
+     ]}
+  ]
+}

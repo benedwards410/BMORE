@@ -1,0 +1,13 @@
+{
+  "from": 1, "to": 2, "total": 2,
+  "products": [
+    {"sku": 6505727, "name": "Sony - WH-1000XM6 Wireless Noise Canceling Headphones - Black",
+     "salePrice": 379.99, "regularPrice": 449.99, "onSale": true, "upc": "027242927896",
+     "modelNumber": "WH1000XM6/B", "manufacturer": "Sony", "onlineAvailability": true,
+     "condition": "New", "freeShipping": true, "shippingCost": 0},
+    {"sku": 6505728, "name": "Sony - WH-1000XM6 Wireless Noise Canceling Headphones - Silver",
+     "salePrice": 449.99, "regularPrice": 449.99, "onSale": false, "upc": "027242927902",
+     "modelNumber": "WH1000XM6/S", "manufacturer": "Sony", "onlineAvailability": false,
+     "condition": "New", "freeShipping": true, "shippingCost": 0}
+  ]
+}

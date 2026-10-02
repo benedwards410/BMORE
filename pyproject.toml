@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dealfinder"
+version = "0.1.0"
+description = "Find the lowest price on the right product from a seller you can trust."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["requests>=2.28"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+dealfinder = "dealfinder.cli:main"
+
+[tool.setuptools]
+packages = ["dealfinder", "dealfinder.sources"]
+
+[tool.setuptools.package-data]
+dealfinder = ["policies.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
