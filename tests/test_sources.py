@@ -108,3 +108,9 @@ def test_product_page_respects_robots_and_blocks(fixture):
 
     ok = FakeHttp({"robots.txt": FakeResponse(404, text=""), "/p/1": FakeResponse(text=fixture("target_page.html"))})
     assert ProductPage(http=ok).fetch("https://shop.example/p/1")[0].price == 389.99
+
+
+def test_bestbuy_search_keeps_single_digit_generation(fixture):
+    http = FakeHttp({"api.bestbuy.com": FakeResponse(body={"products": []})})
+    BestBuy(api_key="k", http=http).search("AirPods 4")
+    assert "search=AirPods&search=4" in http.calls[0][1]

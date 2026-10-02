@@ -64,7 +64,7 @@ class BestBuy:
         )
 
     def search(self, query: str, limit: int = 10) -> list[Offer]:
-        terms = [t for t in re.findall(r"[A-Za-z0-9]+", query) if len(t) > 1][:8]
+        terms = [t for t in re.findall(r"[A-Za-z0-9]+", query) if len(t) > 1 or t.isdigit()][:8]
         if not terms:
             return []
         return self._query("&".join(f"search={quote(t)}" for t in terms), limit)
