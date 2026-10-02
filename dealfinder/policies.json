@@ -1,0 +1,48 @@
+{
+  "_note": "Retailer policies change. Each entry records when it was last checked; the app always tells you to confirm on the policy page before asking. Edit this file to add retailers or update terms.",
+  "bestbuy": {
+    "name": "Best Buy",
+    "matches_competitors": ["amazon", "walmart", "target", "costco", "samsclub", "bhphoto", "apple"],
+    "matches_competitors_after_purchase": true,
+    "own_price_adjustment_days": 15,
+    "conditions": "Identical item (same model number), new, in stock and sold by the competitor itself — not a marketplace seller. No membership-only, clearance or bundle prices. My Best Buy paid members get a longer window.",
+    "policy_url": "https://www.bestbuy.com/site/help-topics/price-match-guarantee/pcmcat290300050002.c",
+    "checked": "2026-10-02"
+  },
+  "target": {
+    "name": "Target",
+    "matches_competitors": [],
+    "matches_competitors_after_purchase": false,
+    "own_price_adjustment_days": 14,
+    "conditions": "Competitor price matching ended July 2025. Target still matches its own lower price (store or target.com) within 14 days of purchase.",
+    "policy_url": "https://help.target.com/help",
+    "checked": "2026-10-02"
+  },
+  "walmart": {
+    "name": "Walmart",
+    "matches_competitors": [],
+    "matches_competitors_after_purchase": false,
+    "own_price_adjustment_days": 0,
+    "conditions": "No competitor matching since 2019. Stores may match a lower walmart.com price on items sold by Walmart (not marketplace sellers) at checkout.",
+    "policy_url": "https://www.walmart.com/help",
+    "checked": "2026-10-02"
+  },
+  "amazon": {
+    "name": "Amazon",
+    "matches_competitors": [],
+    "matches_competitors_after_purchase": false,
+    "own_price_adjustment_days": 0,
+    "conditions": "No price matching or general price protection. If the price drops while the item is still returnable, returning and re-buying is the only route.",
+    "policy_url": "https://www.amazon.com/gp/help/customer/display.html",
+    "checked": "2026-10-02"
+  },
+  "costco": {
+    "name": "Costco",
+    "matches_competitors": [],
+    "matches_competitors_after_purchase": false,
+    "own_price_adjustment_days": 30,
+    "conditions": "No competitor matching. Refunds the difference if Costco's own price drops within 30 days; online purchases are adjusted online, warehouse purchases in person.",
+    "policy_url": "https://customerservice.costco.com/",
+    "checked": "2026-10-02"
+  }
+}

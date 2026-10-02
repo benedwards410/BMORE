@@ -5,7 +5,7 @@ description: Finds the best current price on a specific product across major US 
 
 # Deal Finder
 
-Help the user pay the least for the right product from a seller they can trust. This skill uses only the built-in web search and web fetch tools. It runs no scripts, registers with no outside service, and earns nothing from what the user buys.
+Help the user pay the least for the right product from a seller they can trust. This skill uses the built-in web search and web fetch tools, plus the local `dealfinder` CLI from this repo when it's installed. It registers with no outside service and earns nothing from what the user buys.
 
 ## Principles (why this skill exists)
 
@@ -25,7 +25,17 @@ Help the user pay the least for the right product from a seller they can trust. 
 
 ### 2. Check prices across retailers
 
-Search for the exact model at the retailers that matter for the category. Default US set:
+**If `dealfinder` is installed** (`dealfinder sources` succeeds), run it first. It reads real-time data from the Best Buy, Keepa and eBay APIs when they're configured, and it already matches products by UPC and model number, vets sellers and pulls price history:
+
+```bash
+dealfinder compare --upc <UPC> --json            # or --model <MODEL>, or --url <product page>, or "search terms"
+dealfinder compare --url <URL> --prefer bestbuy  # can the user's preferred store price-match?
+dealfinder pricematch --at <retailer> --price <paid> --on <YYYY-MM-DD> --upc <UPC>   # already bought it
+```
+
+Treat its output as the verified core of the answer. Use web search to fill gaps, such as retailers it couldn't reach or a store it reported as blocked. If a source is listed as not configured, don't ask the user for API keys mid-task; just search the web for that retailer.
+
+Otherwise, search for the exact model at the retailers that matter for the category. Default US set:
 
 - Manufacturer store (Apple, Samsung, etc.)
 - Amazon (sold and shipped by Amazon, not third-party)
@@ -37,7 +47,7 @@ Also check, when they apply:
 - **Open-box / certified refurbished** from the manufacturer or a major retailer (note warranty length).
 - **Price history** (e.g., camelcamelcamel for Amazon) to judge whether today's price is genuinely low or a routine "sale."
 - **Upcoming events** (Prime Day, Black Friday, back-to-school, new-model launches) if waiting is likely to save meaningful money.
-- **Price-match policies** at the user's preferred retailer, if they have one.
+- **Price-match policies** at the user's preferred retailer, if they have one. As of October 2026, Best Buy matches Amazon, Walmart, Target, Costco, Sam's Club, B&H and Apple. Target stopped matching competitors in July 2025, and Amazon, Walmart and Costco don't match competitors. Best Buy (15 days), Target (14 days) and Costco (30 days) refund the difference if their *own* price drops. The `dealfinder/policies.json` file in this repo holds the current terms, so check it, or the retailer's policy page, before quoting.
 
 Use web_fetch on the product page when search snippets don't show a current price. If a price can't be verified, label it "unverified" rather than guessing.
 
