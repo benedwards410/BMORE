@@ -1,0 +1,14 @@
+node_modules/
+
+# API keys
+.env
+
+# Files the pipeline writes while it runs
+seen_items.db
+seen_items.db-journal
+pending_items.json
+draft_entries.json
+published_log.json
+.fetch.lock
+.drafts.lock
+*.tmp
