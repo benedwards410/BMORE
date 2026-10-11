@@ -1,0 +1,5 @@
+# Netlify serves the Sub Board app from the sub-board/ folder.
+# No build step: it is a static single-file app. The root package.json belongs to the RSS pipeline.
+[build]
+  publish = "sub-board"
+  command = ""
