@@ -17,7 +17,7 @@ Also: two halves with a halftime break, pause/resume, one-tap undo of the last s
 
 ## Using it
 
-- **Roster** tab: add numbers and names, pick half length and formation (4-3-3 default).
+- **Roster** tab: add numbers and names, or load a team file (the old app's export works too). Pick half length and formation (4-3-3 default).
 - **Game** tab: tap a spot, tap a bench player to place them. Tap **Kick off**.
 - To sub: tap the player on the field, then the bench player coming on (or the other way round). Tap two spots to switch positions.
 - **Halftime** and **End game** need two taps so a bump doesn't end the half.

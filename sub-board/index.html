@@ -375,7 +375,9 @@ function renderRoster() {
     + '<div class="field"><span class="lbl">Half length</span><div class="seg">' + HALVES.map(x => '<button data-act="half-len" data-v="' + x + '" aria-pressed="' + (s.halfLen === x) + '">' + x + '</button>').join('') + '</div></div>'
     + '<div class="field"><span class="lbl">Formation</span><div class="seg">' + FKEYS.map(f => '<button data-act="formation" data-v="' + f + '" aria-pressed="' + (s.formation === f) + '">' + f + '</button>').join('') + '</div>'
     + (locked ? '<p class="muted" style="font-size:14px">Game in progress: formation and half length apply to the next game.</p>' : '') + '</div></div></div>';
-  h += '<div class="panel"><h2>Data</h2><p class="muted">Everything is saved on this device only.</p><div><button class="btn btn-danger' + (ui.armed === 'reset' ? ' armed' : '') + '" data-act="reset">' + (ui.armed === 'reset' ? 'Tap again to erase everything' : 'Erase all data') + '</button></div></div>';
+  h += '<div class="panel"><h2>Data</h2><p class="muted">Everything is saved on this device only.</p>'
+    + '<div class="field"><label for="team-file">Load team file (.json, the old app\'s export works too)</label><input class="inp" type="file" id="team-file" accept=".json,application/json" data-change="team-file"></div>'
+    + '<div><button class="btn btn-danger' + (ui.armed === 'reset' ? ' armed' : '') + '" data-act="reset">' + (ui.armed === 'reset' ? 'Tap again to erase everything' : 'Erase all data') + '</button></div></div>';
   $('#scr-roster').innerHTML = h;
 }
 
@@ -491,6 +493,29 @@ document.addEventListener('input', e => {
   if (el.dataset.input === 'name') { const p = P[Number(el.dataset.n)]; if (p) { p.name = el.value.trim() || ('#' + p.num); save(); } }
   else if (el.dataset.input === 'add-num') ui.add.num = el.value;
   else if (el.dataset.input === 'add-name') ui.add.name = el.value;
+});
+// Team file: accepts {players:[...]}, the old app's export {state:{players:[...]}}, or a bare array. Keeps number and name only.
+function loadTeam(text) {
+  let o; try { o = JSON.parse(text); } catch (e) { return toast('That isn\'t a team file'); }
+  const src = Array.isArray(o) ? {players:o} : (o && o.state && Array.isArray(o.state.players)) ? o.state : o;
+  if (!src || !Array.isArray(src.players)) return toast('That isn\'t a team file');
+  const inc = migrate({players:src.players, settings:src.settings || {}}).players;
+  if (!inc.length) return toast('No players found in that file');
+  const byNum = new Map(S.players.map(p => [p.num, p]));
+  inc.forEach(p => byNum.set(p.num, p));
+  S.players = [...byNum.values()].sort((a, b) => a.num - b.num);
+  const st = src.settings || {};
+  if (HALVES.includes(Number(st.halfLen))) S.settings.halfLen = Number(st.halfLen);
+  if (FKEYS.includes(st.formation)) S.settings.formation = st.formation;
+  save(); render(); toast('Loaded ' + inc.length + ' players');
+}
+document.addEventListener('change', e => {
+  if (e.target.dataset.change !== 'team-file') return;
+  const f = e.target.files && e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => loadTeam(String(r.result));
+  r.onerror = () => toast('That file could not be read');
+  r.readAsText(f);
 });
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && ui.tab === 'roster' && /^add-/.test(e.target.dataset.input || '')) actions.add(); });
 
