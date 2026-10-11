@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0D1B24">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sub Board">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>Sub Board</title>
+<style>
+:root{
+  --bg:#ECF0EE; --surface:#FFFFFF; --sunken:#E1E7E4; --ink:#0D1B24; --ink-2:#2A3942; --muted:#56666D;
+  --line:#CDD7D3; --line-strong:#A9B7B2; --accent:#D1500A; --accent-ink:#FFFFFF; --accent-soft:#FCE4D4;
+  --on:#2E7049; --on-soft:#DCEEE2; --bad:#C0262D; --bad-soft:#FBE1E1;
+  --board-bg:#0D1B24; --board-ink:#F2F6F4; --board-muted:#93A6AE; --board-btn:#1C2D36; --board-track:#24363F;
+  --shadow:0 1px 2px rgba(13,27,36,.10),0 6px 18px rgba(13,27,36,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0A1115; --surface:#121C22; --sunken:#0D161B; --ink:#E4ECEE; --ink-2:#C2CED2; --muted:#8C9EA5;
+    --line:#233239; --line-strong:#374951; --accent:#FF7A33; --accent-ink:#1A0900; --accent-soft:#3A1E0E;
+    --on:#43A870; --on-soft:#15301F; --bad:#FF6B6B; --bad-soft:#3B1515;
+    --board-bg:#05090C; --board-ink:#E9F0EE; --board-muted:#7F939B; --board-btn:#14222A; --board-track:#1B2A31;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.3);
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.4;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;user-select:none}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tnum{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* App bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1400px;margin-inline:auto;padding-inline:16px;display:flex;align-items:center;gap:16px;min-height:56px}
+.brand{font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.tabs{display:flex;gap:2px;flex:1}
+.tab{min-height:48px;padding:0 16px;border:0;background:none;font-weight:700;font-size:17px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:3px solid transparent}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.mini{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border-radius:999px;border:0;background:var(--board-bg);color:var(--board-ink);font-weight:700;font-size:18px;white-space:nowrap}
+.mini .dot{width:9px;height:9px;border-radius:50%;background:var(--board-muted)}
+.mini.running .dot{background:var(--accent)}
+
+.wrap{max-width:1400px;margin-inline:auto;padding:16px 16px 56px}
+.screen{display:grid;gap:16px}
+
+/* Buttons & controls */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font-weight:700;font-size:16px;white-space:nowrap}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.btn-accent{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn-danger{border-color:var(--bad);color:var(--bad)}
+.btn.armed{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn-sm{min-height:40px;padding:0 12px;font-size:15px}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--sunken);border-radius:10px;padding:3px;gap:3px}
+.seg button{min-height:42px;padding:0 14px;border:0;border-radius:8px;background:none;font-weight:700;font-size:16px;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.field{display:grid;gap:6px}
+.field>label,.lbl{font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.inp{min-height:48px;padding:0 12px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);width:100%}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:12px;align-content:start}
+.panel h2{font-size:20px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* Clock bar */
+.board{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding:12px 18px;border-radius:14px;background:var(--board-bg);color:var(--board-ink)}
+.b-half{font-weight:700;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--board-muted)}
+.b-time{font-weight:800;font-size:clamp(44px,6vw,64px);line-height:1;font-variant-numeric:tabular-nums}
+.b-over{font-weight:700;font-size:20px;color:var(--accent);font-variant-numeric:tabular-nums;min-width:1ch}
+.b-acts{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto}
+.b-btn{min-height:54px;padding:0 20px;border-radius:10px;border:1px solid var(--board-track);background:var(--board-btn);color:var(--board-ink);font-weight:800;font-size:18px;letter-spacing:.05em;text-transform:uppercase}
+.b-btn.go{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.b-btn.armed{background:var(--bad);border-color:var(--bad);color:#fff}
+.b-btn:disabled{opacity:.4}
+
+/* Field + bench */
+.live{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,340px);gap:16px;align-items:start}
+.pitch{display:grid;gap:14px;padding:16px 8px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.prow{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.tile{--heat:0;position:relative;width:clamp(118px,15.5vw,180px);min-height:132px;padding:8px 10px 10px;border-radius:14px;border:2px solid var(--line);background:var(--surface);background:color-mix(in srgb,var(--accent-soft) calc(var(--heat)*100%),var(--surface));text-align:left;display:grid;grid-template-rows:auto auto 1fr auto;gap:2px;box-shadow:var(--shadow)}
+.tile .pos{font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tile .who{display:flex;align-items:baseline;gap:6px;min-width:0}
+.tile .num{font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.tile .name{font-weight:700;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tile .shift{font-weight:800;font-size:clamp(36px,4.6vw,54px);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.01em;align-self:end}
+.tile .tot{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tile.empty{border-style:dashed;background:var(--sunken);box-shadow:none}
+.tile.empty .shift{color:var(--muted);font-size:20px;font-weight:700}
+.tile.sel{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent),var(--shadow)}
+.bench{display:grid;gap:10px}
+.bench h3{font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center}
+.bench h3 .count{font-size:13px;background:var(--sunken);border-radius:999px;padding:2px 8px;color:var(--ink-2)}
+.chip{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:12px;min-height:64px;padding:6px 14px 6px 6px;border-radius:14px;border:2px solid var(--line);background:var(--surface);text-align:left;width:100%}
+.chip .n{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--surface);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.chip .who{display:grid;line-height:1.15;min-width:0}
+.chip .who b{font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip .who small{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.chip .sat{font-weight:800;font-size:30px;font-variant-numeric:tabular-nums;line-height:1;text-align:right}
+.chip .sat small{display:block;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.chip.sel{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent)}
+.chip.out{opacity:.6;border-style:dashed}
+.chip.out .n{background:var(--sunken);color:var(--muted)}
+.strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:10px 14px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--accent);font-weight:700}
+.strip .acts{display:flex;flex-wrap:wrap;gap:8px}
+.empty-note{color:var(--muted);font-size:15px}
+
+/* Roster */
+.rlist{display:grid;gap:8px}
+.rrow{display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:10px}
+.rrow .num{font-weight:800;font-size:22px;text-align:center;font-variant-numeric:tabular-nums}
+.rrow input{min-height:46px;padding:0 10px;border-radius:8px;border:1px solid transparent;background:none;font-weight:700;width:100%}
+.rrow input:focus{border-color:var(--line-strong);background:var(--surface)}
+.addrow{display:grid;grid-template-columns:110px 1fr auto;gap:10px;align-items:end}
+.settings{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:14px;padding:10px 12px 10px 18px;border-radius:12px;background:var(--board-bg);color:var(--board-ink);box-shadow:var(--shadow);font-weight:700;max-width:calc(100% - 32px)}
+.toast button{min-height:40px;padding:0 14px;border-radius:8px;border:1px solid var(--board-track);background:var(--board-btn);color:var(--board-ink);font-weight:700}
+
+@media (max-width: 900px){
+  .live{grid-template-columns:minmax(0,1fr)}
+  .tile{width:clamp(100px,22vw,160px);min-height:118px}
+  .tile .shift{font-size:clamp(30px,7vw,46px)}
+}
+@media (max-width: 560px){
+  .brand{display:none}
+  .addrow{grid-template-columns:90px 1fr}
+  .addrow .btn{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <div class="brand">Sub Board</div>
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-act="tab" data-tab="game" aria-selected="true">Game</button>
+    <button class="tab" role="tab" data-act="tab" data-tab="roster" aria-selected="false">Roster</button>
+  </nav>
+  <button class="mini" id="mini" data-act="tab" data-tab="game" hidden></button>
+</div></header>
+<main class="wrap">
+  <section class="screen" id="scr-game"></section>
+  <section class="screen" id="scr-roster" hidden></section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="sr-only" id="announce" aria-live="assertive"></div>
+
+<script>
+(() => {
+'use strict';
+const KEY = 'subboard-lite-v1';
+const FORMATIONS = {
+  '4-3-3':   [['LW','ST','RW'], ['LCM','CM','RCM'], ['LB','LCB','RCB','RB'], ['GK']],
+  '4-4-2':   [['LST','RST'], ['LM','LCM','RCM','RM'], ['LB','LCB','RCB','RB'], ['GK']],
+  '3-4-3':   [['LW','ST','RW'], ['LM','LCM','RCM','RM'], ['LCB','CB','RCB'], ['GK']],
+  '4-2-3-1': [['ST'], ['LAM','CAM','RAM'], ['LDM','RDM'], ['LB','LCB','RCB','RB'], ['GK']]
+};
+const FKEYS = Object.keys(FORMATIONS);
+const HALVES = [20, 25, 30, 35, 40, 45];
+
+/* ---------- Utilities ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const mmss = sec => { sec = Math.max(0, Math.floor(sec)); return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); };
+const mins = sec => Math.floor(Math.max(0, sec) / 60) + "'";
+const clone = o => JSON.parse(JSON.stringify(o));
+const now = () => Date.now();
+
+/* ---------- State ---------- */
+function seed() { return {v:1, players:[], settings:{halfLen:30, formation:'4-3-3'}, game:null}; }
+function migrate(o) {
+  const d = seed(), st = o.settings || {};
+  const num = v => Number.isFinite(Number(v)) ? Number(v) : 0;
+  const seen = new Set();
+  o.players = (Array.isArray(o.players) ? o.players : []).map(p => {
+    const n = Number(p && p.num);
+    if (!Number.isInteger(n) || n < 0 || n > 99 || seen.has(n)) return null;
+    seen.add(n); return {num:n, name:String(p.name ?? '').trim().slice(0, 30) || ('#' + n)};
+  }).filter(Boolean).sort((a, b) => a.num - b.num);
+  o.settings = {halfLen: HALVES.includes(Number(st.halfLen)) ? Number(st.halfLen) : d.settings.halfLen,
+                formation: FKEYS.includes(st.formation) ? st.formation : d.settings.formation};
+  const g = o.game;
+  if (g && typeof g === 'object') {
+    g.status = ['setup','live','half','final'].includes(g.status) ? g.status : 'setup';
+    g.half = g.half === 2 ? 2 : 1;
+    const lu = (Array.isArray(g.lineup) ? g.lineup : []).slice(0, 11).map(v => v == null ? null : num(v));
+    while (lu.length < 11) lu.push(null);
+    const seenL = new Set();
+    g.lineup = lu.map(n => (n == null || seenL.has(n) || !seen.has(n)) ? null : (seenL.add(n), n));
+    const stints = {};
+    for (const k of Object.keys(g.stints || {})) if (Array.isArray(g.stints[k])) stints[num(k)] = g.stints[k].filter(x => Array.isArray(x)).map(x => [num(x[0]), x[1] == null ? null : num(x[1])]);
+    g.stints = stints;
+    const bs = {}; for (const k of Object.keys(g.benchSince || {})) bs[num(k)] = num(g.benchSince[k]);
+    g.benchSince = bs;
+    g.out = [...new Set((Array.isArray(g.out) ? g.out : []).map(num))];
+    const c = g.clock || {};
+    g.clock = {base:Math.max(0, num(c.base)), running:!!c.running && g.status === 'live', wall:num(c.wall)};
+    for (const k of ['half1End','half2Start','endT']) g[k] = g[k] == null ? null : num(g[k]);
+    g.halfLen = HALVES.includes(Number(g.halfLen)) ? Number(g.halfLen) : o.settings.halfLen;
+  } else o.game = null;
+  return o;
+}
+function load() { try { const raw = localStorage.getItem(KEY); if (raw) return migrate(JSON.parse(raw)); } catch (e) {} return seed(); }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+let S = load();
+let P = {};
+const refreshP = () => { P = Object.fromEntries(S.players.map(p => [p.num, p])); };
+refreshP();
+const ui = {tab:'game', sel:null, armed:null, undo:null, add:{num:'', name:''}};
+
+/* ---------- Game model ---------- */
+const slotsOf = g => FORMATIONS[g.formation || S.settings.formation].flat();
+const rowsOf = g => FORMATIONS[g.formation || S.settings.formation];
+const halfSec = g => (g.halfLen || S.settings.halfLen) * 60;
+const isLive = g => !!g && (g.status === 'live' || g.status === 'half');
+function gameT(g) { const c = g.clock; return c.base + (c.running ? Math.max(0, (now() - c.wall) / 1000) : 0); }
+function clockParts(g) {
+  const H = halfSec(g), t = gameT(g);
+  const inHalf = g.half === 1 ? t : t - (g.half2Start ?? t);
+  return {main: mmss((g.half === 1 ? 0 : H) + Math.min(inHalf, H)), over: inHalf > H ? '+' + mmss(inHalf - H) : ''};
+}
+function played(g, n, t) { let x = 0; for (const [a, b] of (g.stints[n] || [])) x += (b == null ? t : b) - a; return Math.max(0, x); }
+function shiftSec(g, n, t) { const s = g.stints[n]; return s && s.length && s[s.length - 1][1] == null ? t - s[s.length - 1][0] : 0; }
+function satSec(g, n) { const w = g.benchSince[n]; return w ? Math.max(0, (now() - w) / 1000) : 0; }
+function openStint(g, n, t) { (g.stints[n] = g.stints[n] || []).push([t, null]); }
+function closeStint(g, n, t) { const s = g.stints[n]; if (s && s.length && s[s.length - 1][1] == null) s[s.length - 1][1] = t; }
+const onField = g => g.lineup.filter(n => n != null && P[n]);
+function benchOf(g) {
+  const on = new Set(onField(g));
+  const list = S.players.filter(p => !on.has(p.num) && !g.out.includes(p.num)).map(p => p.num);
+  if (g.status === 'setup') return list;
+  // Smallest benchSince = came off earliest = sat longest. No timestamp (added mid-game) sinks to the bottom.
+  const since = n => g.benchSince[n] || Number.MAX_SAFE_INTEGER;
+  return list.sort((a, b) => since(a) - since(b) || a - b);
+}
+function newGame(prev) {
+  const g = {status:'setup', half:1, formation:S.settings.formation, halfLen:S.settings.halfLen, clock:{base:0, running:false, wall:0},
+    lineup:Array(11).fill(null), stints:{}, benchSince:{}, out:[], half1End:null, half2Start:null, endT:null};
+  if (prev && prev.formation === g.formation) g.lineup = prev.lineup.map(n => (n != null && P[n]) ? n : null);
+  return g;
+}
+function snapshot(g) { ui.undo = clone({lineup:g.lineup, stints:g.stints, benchSince:g.benchSince, out:g.out}); }
+function doSub(g, i, n) {
+  const t = gameT(g), outN = g.lineup[i];
+  if (isLive(g)) {
+    if (outN != null) { closeStint(g, outN, t); g.benchSince[outN] = now(); }
+    openStint(g, n, t); delete g.benchSince[n];
+  }
+  g.lineup[i] = n;
+  return outN;
+}
+function takeOff(g, i) {
+  const t = gameT(g), n = g.lineup[i];
+  if (n == null) return;
+  if (isLive(g)) { closeStint(g, n, t); g.benchSince[n] = now(); }
+  g.lineup[i] = null;
+}
+const pname = n => '#' + n + ' ' + (P[n] ? P[n].name : '');
+
+/* ---------- Wake lock ---------- */
+let wakeLock = null;
+async function setWake(on) {
+  try {
+    if (on && !wakeLock && navigator.wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => { wakeLock = null; }); }
+    else if (!on && wakeLock) { await wakeLock.release(); wakeLock = null; }
+  } catch (e) { wakeLock = null; }
+}
+
+/* ---------- Rendering ---------- */
+function render() {
+  refreshP();
+  $$('.tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === ui.tab)));
+  $('#scr-game').hidden = ui.tab !== 'game'; $('#scr-roster').hidden = ui.tab !== 'roster';
+  if (ui.tab === 'game') renderGame(); else renderRoster();
+  renderMini();
+}
+function renderMini() {
+  const g = S.game, el = $('#mini');
+  if (!g || !isLive(g) || ui.tab === 'game') { el.hidden = true; return; }
+  el.hidden = false; el.className = 'mini' + (g.clock.running ? ' running' : '');
+  el.innerHTML = '<span class="dot"></span><span data-clock>' + clockParts(g).main + '</span>';
+}
+function renderGame() {
+  if (!S.players.length) {
+    $('#scr-game').innerHTML = '<div class="panel"><h2>Add your players first</h2><p class="muted">Numbers and names. That is all the app needs.</p><div><button class="btn btn-accent" data-act="tab" data-tab="roster">Open Roster</button></div></div>';
+    return;
+  }
+  if (!S.game) { S.game = newGame(null); save(); }
+  const g = S.game, t = gameT(g), cp = clockParts(g);
+  const labels = slotsOf(g), rows = rowsOf(g);
+  const live = g.status === 'live', setup = g.status === 'setup', final = g.status === 'final';
+  // Clock bar
+  let acts = '';
+  if (setup) acts = '<button class="b-btn go" data-act="kickoff"' + (onField(g).length ? '' : ' disabled') + '>Kick off</button>';
+  else if (g.status === 'half') acts = '<button class="b-btn go" data-act="second-half">Start 2nd half</button>' + armBtn('end-game', 'End game', 'Tap again to end');
+  else if (live) acts = (g.clock.running ? '<button class="b-btn" data-act="pause">Pause</button>' : '<button class="b-btn go" data-act="resume">Resume</button>')
+    + (g.half === 1 ? armBtn('halftime', 'Halftime', 'Tap again: halftime') : armBtn('end-game', 'End game', 'Tap again to end'));
+  else acts = '<button class="b-btn go" data-act="new-game">New game</button>';
+  if (ui.undo && !final) acts += '<button class="b-btn" data-act="undo">Undo</button>';
+  const halfLabel = setup ? 'Starters' : g.status === 'half' ? 'Halftime' : final ? 'Final' : g.half === 1 ? '1st half' : '2nd half';
+  let h = '<div class="board"><div><div class="b-half">' + halfLabel + ' · ' + g.formation + '</div><div class="row" style="gap:12px"><span class="b-time" data-clock>' + cp.main + '</span><span class="b-over" data-over>' + cp.over + '</span></div></div><div class="b-acts">' + acts + '</div></div>';
+  // Field
+  const shifts = g.lineup.map(n => n == null ? 0 : shiftSec(g, n, t));
+  let k = 0, pitch = '<div class="pitch">';
+  rows.forEach(r => {
+    pitch += '<div class="prow">';
+    r.forEach(() => {
+      const i = k++, n = g.lineup[i], p = n != null ? P[n] : null;
+      const sel = ui.sel && ui.sel.type === 'slot' && ui.sel.i === i;
+      const heat = p && live ? clamp(shifts[i] / halfSec(g), 0, 1) : 0;
+      pitch += '<button type="button" class="tile' + (p ? '' : ' empty') + (sel ? ' sel' : '') + '" style="--heat:' + heat.toFixed(2) + '" data-act="slot" data-i="' + i + '" data-n="' + (p ? n : '') + '" aria-label="' + labels[i] + (p ? ', ' + esc(pname(n)) : ', empty') + '">'
+        + '<span class="pos">' + labels[i] + '</span>'
+        + (p ? '<span class="who"><span class="num">' + n + '</span><span class="name">' + esc(p.name) + '</span></span><span class="shift" data-shift="' + n + '">' + (setup ? '' : mmss(shifts[i])) + '</span><span class="tot" data-tot="' + n + '">' + (setup ? 'starting' : mins(played(g, n, t)) + ' today') + '</span>'
+           : '<span class="who"></span><span class="shift">' + (setup ? 'Tap to fill' : 'Empty') + '</span><span class="tot"></span>')
+        + '</button>';
+    });
+    pitch += '</div>';
+  });
+  pitch += '</div>';
+  // Bench
+  const bench = benchOf(g), out = S.players.filter(p => g.out.includes(p.num));
+  let side = '<div class="bench"><h3>Bench <span class="count">' + bench.length + '</span>' + (setup ? '' : '<span class="muted" style="letter-spacing:0;text-transform:none;font-weight:400">sat longest first</span>') + '</h3>';
+  side += bench.length ? bench.map(n => chip(g, n, t, false)).join('') : '<p class="empty-note">Nobody on the bench.</p>';
+  if (out.length) side += '<h3 style="margin-top:8px">Out <span class="count">' + out.length + '</span></h3>' + out.map(p => chip(g, p.num, t, true)).join('');
+  side += '</div>';
+  $('#scr-game').innerHTML = h + strip(g) + '<div class="live"><div>' + pitch + (setup ? '<p class="empty-note" style="margin-top:8px">Tap a spot, then a bench player. Tap two spots to switch them.</p>' : '') + '</div>' + side + '</div>';
+}
+function chip(g, n, t, isOut) {
+  const p = P[n], sel = ui.sel && ui.sel.type === 'bench' && ui.sel.n === n, setup = g.status === 'setup';
+  let right = '';
+  if (isOut) right = '<span class="sat" style="font-size:16px">Tap: back in</span>';
+  else if (!setup) right = '<span class="sat" data-sat="' + n + '">' + mmss(satSec(g, n)) + '<small>sat</small></span>';
+  const sub = isOut ? 'out' : setup ? 'tap to place' : '<span data-tot="' + n + '">' + mins(played(g, n, t)) + ' today</span>';
+  return '<button type="button" class="chip' + (sel ? ' sel' : '') + (isOut ? ' out' : '') + '" data-act="' + (isOut ? 'toggle-out' : 'bench') + '" data-n="' + n + '" aria-pressed="' + sel + '">'
+    + '<span class="n">' + n + '</span><span class="who"><b>' + esc(p.name) + '</b><small>' + sub + '</small></span>' + right + '</button>';
+}
+function strip(g) {
+  if (!ui.sel || g.status === 'final') return '';
+  const labels = slotsOf(g);
+  if (ui.sel.type === 'slot') {
+    const i = ui.sel.i, n = g.lineup[i];
+    const text = n != null ? esc(pname(n)) + ' at ' + labels[i] + ': tap a bench player to bring on, or another spot to switch.' : labels[i] + ' is empty: tap a bench player to put in.';
+    return '<div class="strip"><p>' + text + '</p><div class="acts">' + (n != null ? '<button class="btn btn-sm btn-danger" data-act="take-off" data-i="' + i + '">Take off</button><button class="btn btn-sm btn-danger" data-act="mark-out" data-i="' + i + '">Out (hurt / left)</button>' : '') + '<button class="btn btn-sm" data-act="clear-sel">Cancel</button></div></div>';
+  }
+  return '<div class="strip"><p>' + esc(pname(ui.sel.n)) + ': tap the spot to go into.</p><div class="acts"><button class="btn btn-sm btn-danger" data-act="toggle-out" data-n="' + ui.sel.n + '">Out (hurt / left)</button><button class="btn btn-sm" data-act="clear-sel">Cancel</button></div></div>';
+}
+function armBtn(key, label, armedLabel) {
+  const a = ui.armed === key;
+  return '<button class="b-btn' + (a ? ' armed' : '') + '" data-act="' + key + '">' + (a ? armedLabel : label) + '</button>';
+}
+function renderRoster() {
+  const s = S.settings, g = S.game, locked = g && isLive(g);
+  let h = '<div class="panel"><h2>' + S.players.length + ' players</h2><div class="rlist">'
+    + S.players.map(p => '<div class="rrow"><span class="num">' + p.num + '</span><input data-input="name" data-n="' + p.num + '" value="' + esc(p.name) + '" aria-label="Name for ' + p.num + '" autocomplete="off">'
+      + '<button class="btn btn-sm btn-danger' + (ui.armed === 'rm-' + p.num ? ' armed' : '') + '" data-act="remove" data-n="' + p.num + '">' + (ui.armed === 'rm-' + p.num ? 'Tap to remove' : 'Remove') + '</button></div>').join('')
+    + '</div><div class="addrow"><div class="field"><label for="add-num">Number</label><input class="inp" id="add-num" type="number" inputmode="numeric" min="0" max="99" data-input="add-num" value="' + esc(ui.add.num) + '"></div>'
+    + '<div class="field"><label for="add-name">Name</label><input class="inp" id="add-name" autocomplete="off" data-input="add-name" value="' + esc(ui.add.name) + '"></div>'
+    + '<button class="btn btn-primary" data-act="add">Add</button></div><p class="muted" id="add-msg"></p></div>';
+  h += '<div class="panel"><h2>Settings</h2><div class="settings">'
+    + '<div class="field"><span class="lbl">Half length</span><div class="seg">' + HALVES.map(x => '<button data-act="half-len" data-v="' + x + '" aria-pressed="' + (s.halfLen === x) + '">' + x + '</button>').join('') + '</div></div>'
+    + '<div class="field"><span class="lbl">Formation</span><div class="seg">' + FKEYS.map(f => '<button data-act="formation" data-v="' + f + '" aria-pressed="' + (s.formation === f) + '">' + f + '</button>').join('') + '</div>'
+    + (locked ? '<p class="muted" style="font-size:14px">Game in progress: formation and half length apply to the next game.</p>' : '') + '</div></div></div>';
+  h += '<div class="panel"><h2>Data</h2><p class="muted">Everything is saved on this device only.</p><div><button class="btn btn-danger' + (ui.armed === 'reset' ? ' armed' : '') + '" data-act="reset">' + (ui.armed === 'reset' ? 'Tap again to erase everything' : 'Erase all data') + '</button></div></div>';
+  $('#scr-roster').innerHTML = h;
+}
+
+/* ---------- Toast, arm ---------- */
+let toastTimer = null;
+function toast(msg, withUndo) {
+  const el = $('#toast');
+  el.innerHTML = '<span>' + esc(msg) + '</span>' + (withUndo ? '<button type="button" data-act="undo">Undo</button>' : '');
+  el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, withUndo ? 6000 : 2500);
+}
+function announce(msg) { const el = $('#announce'); el.textContent = ''; setTimeout(() => { el.textContent = msg; }, 30); }
+let armTimer = null;
+function arm(key) {
+  ui.armed = key; clearTimeout(armTimer);
+  armTimer = setTimeout(() => { ui.armed = null; const a = document.activeElement; if (!(a && /^(INPUT|TEXTAREA)$/.test(a.tagName))) render(); }, 4000);
+}
+function armed(key) { if (ui.armed === key) { ui.armed = null; return true; } arm(key); render(); return false; }
+
+/* ---------- Taps ---------- */
+function tapSlot(g, i) {
+  if (g.status === 'final') return;
+  if (!ui.sel) { ui.sel = {type:'slot', i}; return render(); }
+  if (ui.sel.type === 'slot') {
+    const a = ui.sel.i; ui.sel = null;
+    if (a === i || (g.lineup[a] == null && g.lineup[i] == null)) return render();
+    snapshot(g); const tmp = g.lineup[a]; g.lineup[a] = g.lineup[i]; g.lineup[i] = tmp;
+    save(); render(); if (isLive(g)) toast('Switched ' + slotsOf(g)[a] + ' and ' + slotsOf(g)[i], true);
+    return;
+  }
+  sub(g, i, ui.sel.n);
+}
+function tapBench(g, n) {
+  if (g.status === 'final') return;
+  if (ui.sel && ui.sel.type === 'slot') return sub(g, ui.sel.i, n);
+  ui.sel = (ui.sel && ui.sel.type === 'bench' && ui.sel.n === n) ? null : {type:'bench', n};
+  render();
+}
+function sub(g, i, n) {
+  ui.sel = null;
+  if (g.lineup.includes(n) || !P[n]) return render();
+  snapshot(g);
+  const out = doSub(g, i, n); save(); render();
+  const msg = pname(n) + ' on' + (out != null ? ' for ' + pname(out) : '') + ' at ' + slotsOf(g)[i];
+  announce(msg); if (isLive(g)) toast(msg, true);
+}
+const actions = {
+  tab: el => { ui.tab = el.dataset.tab; ui.sel = null; render(); window.scrollTo(0, 0); },
+  slot: el => tapSlot(S.game, Number(el.dataset.i)),
+  bench: el => tapBench(S.game, Number(el.dataset.n)),
+  'clear-sel': () => { ui.sel = null; render(); },
+  'take-off': el => { const g = S.game, i = Number(el.dataset.i); snapshot(g); takeOff(g, i); ui.sel = null; save(); render(); toast(slotsOf(g)[i] + ' is now empty', true); },
+  'mark-out': el => { const g = S.game, i = Number(el.dataset.i), n = g.lineup[i]; snapshot(g); takeOff(g, i); g.out.push(n); delete g.benchSince[n]; ui.sel = null; save(); render(); toast(pname(n) + ' is out', true); },
+  'toggle-out': el => {
+    const g = S.game, n = Number(el.dataset.n); snapshot(g);
+    if (g.out.includes(n)) { g.out = g.out.filter(x => x !== n); if (g.status !== 'setup') g.benchSince[n] = now(); toast(pname(n) + ' is back on the bench', true); }
+    else { g.out.push(n); delete g.benchSince[n]; toast(pname(n) + ' is out', true); }
+    ui.sel = null; save(); render();
+  },
+  undo: () => {
+    const g = S.game, u = ui.undo; $('#toast').hidden = true;
+    if (!g || !u) return;
+    Object.assign(g, u); ui.undo = null; ui.sel = null; save(); render(); toast('Undone');
+  },
+  kickoff: () => {
+    const g = S.game; if (!onField(g).length) return;
+    g.status = 'live'; g.half = 1; g.clock = {base:0, running:true, wall:now()}; g.stints = {}; g.benchSince = {};
+    onField(g).forEach(n => openStint(g, n, 0));
+    benchOf(g).forEach(n => { g.benchSince[n] = now(); });
+    ui.sel = null; ui.undo = null; setWake(true); save(); render();
+  },
+  pause: () => { const g = S.game; g.clock.base = gameT(g); g.clock.running = false; setWake(false); save(); render(); },
+  resume: () => { const g = S.game; g.clock.wall = now(); g.clock.running = true; setWake(true); save(); render(); },
+  halftime: () => {
+    if (!armed('halftime')) return;
+    const g = S.game, t = gameT(g);
+    g.clock.base = t; g.clock.running = false; g.status = 'half'; g.half1End = t; ui.sel = null; setWake(false); save(); render(); toast('Halftime');
+  },
+  'second-half': () => { const g = S.game, t = gameT(g); g.status = 'live'; g.half = 2; g.half2Start = t; g.clock = {base:t, running:true, wall:now()}; setWake(true); save(); render(); },
+  'end-game': () => {
+    if (!armed('end-game')) return;
+    const g = S.game, t = gameT(g);
+    g.clock.base = t; g.clock.running = false; g.endT = t; g.status = 'final';
+    Object.keys(g.stints).forEach(n => closeStint(g, Number(n), t));
+    ui.sel = null; ui.undo = null; setWake(false); save(); render();
+  },
+  'new-game': () => { S.game = newGame(S.game); ui.sel = null; ui.undo = null; save(); render(); },
+  add: () => {
+    const numEl = $('#add-num'), num = Number(numEl.value), name = $('#add-name').value.trim(), msg = $('#add-msg');
+    if (numEl.value === '' || !Number.isInteger(num) || num < 0 || num > 99) { msg.textContent = 'Enter a number from 0 to 99.'; return; }
+    if (P[num]) { msg.textContent = '#' + num + ' is already on the roster.'; return; }
+    if (!name) { msg.textContent = 'Enter a name.'; return; }
+    S.players.push({num, name}); S.players.sort((a, b) => a.num - b.num); ui.add = {num:'', name:''};
+    save(); render(); $('#add-num').focus();
+  },
+  remove: el => {
+    const n = Number(el.dataset.n); if (!armed('rm-' + n)) return;
+    const g = S.game;
+    if (g && isLive(g) && g.lineup.includes(n)) { toast('Sub this player off first'); render(); return; }
+    if (g) { g.lineup = g.lineup.map(v => v === n ? null : v); g.out = g.out.filter(v => v !== n); delete g.benchSince[n]; }
+    S.players = S.players.filter(p => p.num !== n); save(); render();
+  },
+  'half-len': el => { S.settings.halfLen = Number(el.dataset.v); if (S.game && S.game.status === 'setup') S.game.halfLen = S.settings.halfLen; save(); render(); },
+  formation: el => { S.settings.formation = el.dataset.v; if (S.game && S.game.status === 'setup') S.game.formation = el.dataset.v; save(); render(); },
+  reset: () => { if (!armed('reset')) return; S = seed(); refreshP(); ui.undo = null; ui.sel = null; save(); render(); toast('All data erased'); }
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (!el || el.disabled) return;
+  const fn = actions[el.dataset.act]; if (fn) fn(el);
+});
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (el.dataset.input === 'name') { const p = P[Number(el.dataset.n)]; if (p) { p.name = el.value.trim() || ('#' + p.num); save(); } }
+  else if (el.dataset.input === 'add-num') ui.add.num = el.value;
+  else if (el.dataset.input === 'add-name') ui.add.name = el.value;
+});
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && ui.tab === 'roster' && /^add-/.test(e.target.dataset.input || '')) actions.add(); });
+
+/* ---------- Live tick: updates numbers in place, never re-renders mid-tap ---------- */
+let tickN = 0;
+function tick() {
+  const g = S.game; if (!g || !isLive(g)) return;
+  tickN++;
+  const t = gameT(g), cp = clockParts(g);
+  $$('[data-clock]').forEach(el => { el.textContent = cp.main; });
+  $$('[data-over]').forEach(el => { el.textContent = cp.over; });
+  if (ui.tab !== 'game') return;
+  $$('[data-sat]').forEach(el => { el.innerHTML = mmss(satSec(g, Number(el.dataset.sat))) + '<small>sat</small>'; });
+  if (!g.clock.running) return;
+  $$('[data-shift]').forEach(el => { el.textContent = mmss(shiftSec(g, Number(el.dataset.shift), t)); });
+  $$('[data-tot]').forEach(el => { el.textContent = mins(played(g, Number(el.dataset.tot), t)) + ' today'; });
+  if (tickN % 5 === 0) $$('.tile[data-n]').forEach(el => { const n = el.dataset.n; if (n !== '') el.style.setProperty('--heat', clamp(shiftSec(g, Number(n), t) / halfSec(g), 0, 1).toFixed(2)); });
+}
+setInterval(tick, 1000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { const g = S.game; if (g && g.clock.running) setWake(true); render(); } });
+
+/* ---------- Boot ---------- */
+render();
+{ const g0 = S.game; if (g0 && g0.clock.running) setWake(true); }
+if (location.protocol === 'https:') {
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch (e) {}
+}
+})();
+</script>
+</body>
+</html>
