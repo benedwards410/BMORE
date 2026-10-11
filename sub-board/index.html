@@ -215,7 +215,20 @@ function migrate(o) {
   } else o.game = null;
   return o;
 }
-function load() { try { const raw = localStorage.getItem(KEY); if (raw) return migrate(JSON.parse(raw)); } catch (e) {} return seed(); }
+const OLD_KEY = 'usa16u-subboard-v1';
+function load() {
+  try { const raw = localStorage.getItem(KEY); if (raw) return migrate(JSON.parse(raw)); } catch (e) {}
+  // First run on a device that had the old Sub Board: carry the roster over, numbers and names only.
+  try {
+    const old = JSON.parse(localStorage.getItem(OLD_KEY) || 'null');
+    if (old && Array.isArray(old.players) && old.players.length) {
+      const o = migrate({players:old.players, settings:{halfLen: old.settings && old.settings.halfLen}, game:null});
+      o.v = 1; o.migratedFrom = OLD_KEY;
+      return o;
+    }
+  } catch (e) {}
+  return seed();
+}
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 let S = load();
 let P = {};
