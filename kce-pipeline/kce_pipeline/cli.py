@@ -2,9 +2,16 @@
 
     python -m kce_pipeline <folder> [--out DIR] [--backend auto|api|cache]
 
-Takes a folder of 2-10 documents belonging to ONE project and writes:
-  <out>/<slug>.project.json          the section 6.1 schema, drop-in for the ROI tracker
-  <out>/<slug>.reconciliation.md     the human-readable report
+Takes a folder of 2-10 documents belonging to ONE project and writes, by default
+into <folder>/_reconciliation/ so the report sits beside the documents it was
+built from (backlog item 1):
+  <slug>.<run stamp>.project.json        the section 6.1 schema, drop-in for the ROI tracker
+  <slug>.<run stamp>.reconciliation.md   the human-readable report
+  history/<slug>/<timestamp>.json        one snapshot per run, for "since last run"
+
+Every run carries its own stamp (local time, to the second), so a re-run never
+silently overwrites the previous report -- reports are working documents that
+people annotate. --out DIR writes somewhere else instead, same naming.
 """
 
 from __future__ import annotations
@@ -13,16 +20,46 @@ import argparse
 import json
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from . import diff
 from .report import build_report
 from .run import run_batch
 
+RUN_STAMP_FORMAT = "%Y%m%d-%H%M%S"
+
 
 def slugify(text: str) -> str:
     slug = re.sub(r"[^a-z0-9]+", "_", (text or "project").lower()).strip("_")
     return slug or "project"
+
+
+def default_out_dir(folder: Path) -> Path:
+    """Where a project's outputs go unless --out says otherwise.
+
+    A subfolder, not the project folder itself: the source PDFs stay
+    uncluttered, discovery never picks a report up as an input, and intake
+    already treats `_reconciliation/` as its own.
+    """
+    return folder / "_reconciliation"
+
+
+def output_paths(out_dir: Path, slug: str, stamp: str) -> tuple[Path, Path]:
+    """This run's two output paths. Never reuses an existing name.
+
+    Two runs inside the same second get `_2`, `_3`, ... appended instead of
+    clobbering each other (underscore so the names still sort in run order).
+    """
+    suffix = ""
+    counter = 1
+    while True:
+        json_path = out_dir / f"{slug}.{stamp}{suffix}.project.json"
+        report_path = out_dir / f"{slug}.{stamp}{suffix}.reconciliation.md"
+        if not json_path.exists() and not report_path.exists():
+            return json_path, report_path
+        counter += 1
+        suffix = f"_{counter}"
 
 
 def _json_ready(project: dict) -> dict:
@@ -114,7 +151,7 @@ def main(argv=None) -> int:
                         help="verify the Anthropic API is usable, then exit "
                              "(never prints the key)")
     parser.add_argument("--out", type=Path, default=None,
-                        help="output directory (default: <pipeline>/out)")
+                        help="output directory (default: <folder>/_reconciliation)")
     parser.add_argument("--backend", choices=["auto", "api", "cache"], default=None,
                         help="override the configured extraction backend")
     parser.add_argument("--quiet", action="store_true",
@@ -129,23 +166,28 @@ def main(argv=None) -> int:
     if args.folder is None:
         parser.error("a project folder is required (or pass --check-api)")
 
-    out_dir = args.out or (base_dir / "out")
-    out_dir.mkdir(parents=True, exist_ok=True)
-
     if not args.folder.is_dir():
         parser.error(f"{args.folder} is not a directory")
+
+    out_dir = args.out or default_out_dir(args.folder)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     result = run_batch(args.folder, base_dir, backend_override=args.backend)
     project = result["project"]
 
     slug = slugify(project["project"].get("name") or args.folder.name)
+    stamp = datetime.now().strftime(RUN_STAMP_FORMAT)
 
     # What moved since the last run of this same project (None on a first run).
+    # History lives beside the outputs. Runs recorded before it moved there
+    # (under <pipeline>/out/history/) are still consulted when the new location
+    # holds nothing yet, so the first run after the move still gets its diff.
     current = diff.snapshot(result)
-    result["diff"] = diff.compare(diff.load_previous(base_dir, slug), current)
-    diff.save(base_dir, slug, current)
-    json_path = out_dir / f"{slug}.project.json"
-    report_path = out_dir / f"{slug}.reconciliation.md"
+    previous = diff.load_previous(out_dir, slug,
+                                  legacy_dir=base_dir / "out" / "history" / slug)
+    result["diff"] = diff.compare(previous, current)
+    diff.save(out_dir, slug, current)
+    json_path, report_path = output_paths(out_dir, slug, stamp)
 
     with open(json_path, "w", encoding="utf-8") as handle:
         json.dump(_json_ready(project), handle, indent=2, ensure_ascii=False)

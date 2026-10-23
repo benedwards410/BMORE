@@ -64,16 +64,24 @@ def snapshot(result: dict) -> dict:
     }
 
 
-def history_dir(base_dir: Path, slug: str) -> Path:
-    return base_dir / "out" / "history" / slug
+def history_dir(out_dir: Path, slug: str) -> Path:
+    """Snapshots live beside the run's outputs (backlog item 1), one folder per
+    project slug so a shared --out directory still keeps projects apart."""
+    return out_dir / "history" / slug
 
 
-def load_previous(base_dir: Path, slug: str) -> dict | None:
-    """Most recent prior snapshot for this project, or None on a first run."""
-    folder = history_dir(base_dir, slug)
-    if not folder.is_dir():
-        return None
-    entries = sorted(folder.glob("*.json"))
+def load_previous(out_dir: Path, slug: str, legacy_dir: Path | None = None) -> dict | None:
+    """Most recent prior snapshot for this project, or None on a first run.
+
+    `legacy_dir` is where history was kept before it moved beside the outputs
+    (<pipeline>/out/history/<slug>/). It is read only while the new location
+    holds nothing, so the first run after the move does not look like the first
+    run ever.
+    """
+    folder = history_dir(out_dir, slug)
+    entries = sorted(folder.glob("*.json")) if folder.is_dir() else []
+    if not entries and legacy_dir is not None and legacy_dir.is_dir():
+        entries = sorted(legacy_dir.glob("*.json"))
     if not entries:
         return None
     try:
@@ -83,12 +91,17 @@ def load_previous(base_dir: Path, slug: str) -> dict | None:
         return None
 
 
-def save(base_dir: Path, slug: str, snap: dict, keep: int = 20) -> Path:
+def save(out_dir: Path, slug: str, snap: dict, keep: int = 20) -> Path:
     """Append this run to the project's history, pruning the oldest."""
-    folder = history_dir(base_dir, slug)
+    folder = history_dir(out_dir, slug)
     folder.mkdir(parents=True, exist_ok=True)
     stamp = snap["timestamp"].replace(":", "-")
     path = folder / f"{stamp}.json"
+    # Two runs inside one second must both be kept (and sort in run order).
+    counter = 1
+    while path.exists():
+        counter += 1
+        path = folder / f"{stamp}_{counter}.json"
     with open(path, "w", encoding="utf-8") as handle:
         json.dump(snap, handle, indent=2, ensure_ascii=False)
         handle.write("\n")

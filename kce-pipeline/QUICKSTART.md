@@ -41,10 +41,13 @@ are skipped and listed, not treated as errors.
 
 ## Reading the result
 
-The tool prints a summary and writes two files:
+The tool prints a summary and writes two files into a `_reconciliation` folder
+inside the project folder, so they sit next to the documents (and sync with the
+job in OneDrive). Each run is stamped with its date and time, so running again
+adds a new pair instead of replacing the last one:
 
-- **`<project>.reconciliation.md`** — read this one. It's the report.
-- **`<project>.project.json`** — the data, for importing into the ROI Tracker.
+- **`<project>.<date-time>.reconciliation.md`** — read this one. It's the report.
+- **`<project>.<date-time>.project.json`** — the data, for importing into the ROI Tracker.
 
 The summary ends with one of two lines:
 
@@ -89,7 +92,7 @@ The tool met a product name or SKU it doesn't know. It's told you exactly which.
 Nothing is lost — the cost is still counted — but that item won't reconcile by
 fixture type until someone adds it.
 
-This is a **settings change, not a code change**: `pipeline/config/canonical_fixtures.json`.
+This is a **settings change, not a code change**: `config/canonical_fixtures.json`.
 If you know the SKU, add it under `skuMap`; a part number always beats a guess
 from the description. If you're not sure, send the flag text to whoever maintains
 the tool.
@@ -118,3 +121,8 @@ the same folder again costs nothing and gives an identical result.
 
 Change a document and it gets re-read automatically — the tool notices the file's
 contents changed, not just its name.
+
+Every re-run writes a new stamped report and leaves the earlier ones in place in
+`_reconciliation/`. The new report opens with a short **Changes since the last
+run** section — new or cleared flags, quantities and totals that moved, documents
+added or removed — so you read what changed, not the whole thing again.

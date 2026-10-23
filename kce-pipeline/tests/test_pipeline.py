@@ -855,3 +855,84 @@ class TestRunDiff(unittest.TestCase):
         out = diff.compare(before, after)
         self.assertEqual(out["flagsRaised"], [])
         self.assertEqual(out["flagsCleared"], [])
+
+
+class TestOutputLocation(unittest.TestCase):
+    """Backlog item 1: outputs beside the documents, never overwritten."""
+
+    def setUp(self):
+        import tempfile
+        self.tmp = Path(tempfile.mkdtemp())
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_default_out_dir_is_a_subfolder_of_the_project(self):
+        from kce_pipeline.cli import default_out_dir
+        folder = self.tmp / "MTX11111111 - a job"
+        self.assertEqual(default_out_dir(folder), folder / "_reconciliation")
+
+    def test_output_names_carry_the_run_stamp_and_never_collide(self):
+        from kce_pipeline.cli import output_paths
+        first = output_paths(self.tmp, "steve_s_pools", "20260101-120000")
+        self.assertEqual(first[0].name, "steve_s_pools.20260101-120000.project.json")
+        self.assertEqual(first[1].name, "steve_s_pools.20260101-120000.reconciliation.md")
+        first[0].write_text("{}", encoding="utf-8")   # a run already landed this second
+        second = output_paths(self.tmp, "steve_s_pools", "20260101-120000")
+        self.assertEqual(second[0].name, "steve_s_pools.20260101-120000_2.project.json")
+        self.assertEqual(second[1].name, "steve_s_pools.20260101-120000_2.reconciliation.md")
+        # The suffix must keep run order under a plain name sort.
+        self.assertLess(first[0].name, second[0].name)
+
+    def test_history_lives_beside_the_outputs_and_reads_legacy_once(self):
+        from kce_pipeline import diff
+        out = self.tmp / "_reconciliation"
+        self.assertEqual(diff.history_dir(out, "p"), out / "history" / "p")
+
+        legacy = self.tmp / "legacy_history"
+        legacy.mkdir()
+        old = {"timestamp": "2025-12-31T00:00:00", "flags": [], "documents": [],
+               "quantities": {}, "totals": {}}
+        (legacy / "2025-12-31T00-00-00.json").write_text(json.dumps(old), encoding="utf-8")
+        self.assertIsNone(diff.load_previous(out, "p"))
+        self.assertEqual(diff.load_previous(out, "p", legacy_dir=legacy)["timestamp"],
+                         "2025-12-31T00:00:00")
+
+        new = dict(old, timestamp="2026-01-01T00:00:00")
+        diff.save(out, "p", new)
+        self.assertTrue((out / "history" / "p" / "2026-01-01T00-00-00.json").exists())
+        # Once the new location has history, legacy is no longer consulted.
+        self.assertEqual(diff.load_previous(out, "p", legacy_dir=legacy)["timestamp"],
+                         "2026-01-01T00:00:00")
+
+    def test_rerun_keeps_the_previous_report(self):
+        """On a copy of the fixture batch: two runs, two report pairs, the first
+        untouched, and the second knows nothing changed."""
+        import shutil
+        from kce_pipeline import cli
+        project = self.tmp / "steves_pools"
+        shutil.copytree(FIXTURES, project, ignore=shutil.ignore_patterns("_reconciliation"))
+
+        cli.main([str(project), "--backend", "cache", "--quiet"])
+        out = project / "_reconciliation"
+        reports = sorted(out.glob("*.reconciliation.md"))
+        self.assertEqual(len(reports), 1)
+        self.assertRegex(reports[0].name, r"^steve_s_pools\.\d{8}-\d{6}(_\d+)?\.reconciliation\.md$")
+        self.assertEqual(len(list(out.glob("*.project.json"))), 1)
+        first_text = reports[0].read_text(encoding="utf-8")
+        self.assertFalse(list(project.glob("*.project.json"))
+                         + list(project.glob("*.reconciliation.md")),
+                         "outputs must not land loose among the source documents")
+
+        cli.main([str(project), "--backend", "cache", "--quiet"])
+        reports = sorted(out.glob("*.reconciliation.md"))
+        self.assertEqual(len(reports), 2, "a re-run must not overwrite the previous report")
+        self.assertEqual(reports[0].read_text(encoding="utf-8"), first_text)
+        self.assertIn("Nothing changed", reports[1].read_text(encoding="utf-8"))
+        self.assertEqual(len(list((out / "history" / "steve_s_pools").glob("*.json"))), 2)
+
+        elsewhere = self.tmp / "elsewhere"
+        cli.main([str(project), "--backend", "cache", "--quiet", "--out", str(elsewhere)])
+        self.assertEqual(len(list(elsewhere.glob("*.reconciliation.md"))), 1)
+        self.assertEqual(len(list(out.glob("*.reconciliation.md"))), 2, "--out still wins")

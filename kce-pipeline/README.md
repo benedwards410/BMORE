@@ -4,7 +4,7 @@ Two Python packages that live together:
 
 | Package | Job | Status in this repo |
 |---|---|---|
-| `kce_pipeline` | One project folder of PDFs → `*.project.json` + `*.reconciliation.md` (flag, don't overwrite) | **Not yet copied in** — see Step 0 |
+| `kce_pipeline` | One project folder of PDFs → `*.project.json` + `*.reconciliation.md` (flag, don't overwrite) | In the repo since 2026-10-23 — fixtures and cache stay in OneDrive, see Step 0 |
 | `kce_intake` | Finds the PDFs in Outlook and the drop folder, files them per MTX, runs the pipeline when a folder changes | Built and tested here |
 
 ```
@@ -30,27 +30,23 @@ HubSpot, DocuSign or a tracker, and never puts dollar amounts or email bodies in
 
 ---
 
-## Step 0 — copy the pipeline in (one time, Ben)
+## Step 0 — the pipeline source (done 2026-10-23)
 
-The pipeline source cannot be pulled through the SharePoint connector, so it is copied by hand.
-Source: `KeyElectric-Operational → KCE -Document-Pipeline (b)` — the **(b)** copy is the good one
-(79 tests pass, both known projects reconcile).
-
-Copy into this folder (`kce-pipeline/`):
-
-```
-pipeline/kce_pipeline/        → kce_pipeline/
-pipeline/config/*.json        → config/            (intake.example.json is already here)
-pipeline/tests/               → tests/             (keeps test_pipeline.py beside the intake tests)
-pipeline/extraction_cache/    → extraction_cache/  (Steve's Pools entries only)
-test_fixtures/steves_pools/   → regression_fixtures/steves_pools/
-task/, README.md (→ PIPELINE_README.md), BACKLOG.md, QUICKSTART.md, kce.cmd, RUN A PROJECT.cmd, CHECK SETUP.cmd
-```
+The pipeline source could not be pulled through the SharePoint connector (it is read-only and serves
+`.py` files as binary), so it was copied by hand from the OneDrive folder
+`KeyElectric-Operational → KCE -Document-Pipeline (b)` — the **(b)** copy was the good one. The layout
+here is flatter than OneDrive's: `kce_pipeline/`, `config/`, `tests/` and `extraction_cache/` sit
+directly in `kce-pipeline/`, with no `pipeline/` level, and the launchers assume that.
 
 **This repo is public.** `.gitignore` keeps `regression_fixtures/`, `test_fixtures/`, `extraction_cache/`
 and every `projects/` folder out of git: real project documents, and the cache (which holds transcriptions
-of them), live in OneDrive only. The pipeline's own tests read the fixtures from disk, so they still run
-locally after the copy; they just are not shipped.
+of them), live in OneDrive only. On a new machine, copy them in from OneDrive once:
+
+```
+test_fixtures/steves_pools/   → regression_fixtures/steves_pools/   (6 files)
+test_fixtures/Bob Bell/       → regression_fixtures/Bob Bell/       (10 files)
+pipeline/extraction_cache/    → extraction_cache/                  (15 entries, keyed by file content)
+```
 
 Then, from `kce-pipeline/`:
 
@@ -58,13 +54,12 @@ Then, from `kce-pipeline/`:
 py -m unittest discover -s tests -q
 ```
 
-Expect 79 + 30 tests passing. The two invariants that must never move: Steve's Pools `modeledCosts`
-total **$7,609.83**; Bob Bell **$181,745.89** (check locally against OneDrive).
+Expect 83 pipeline + 30 intake tests passing. The two invariants that must never move, replayed offline
+with `--backend cache`: Steve's Pools `modeledCosts` total **$7,609.83**; Bob Bell **$181,745.89**.
 
-After the copy, three small BACKLOG items become possible and are worth doing in the same session:
-**1** (write outputs into `<project>/_reconciliation/` with a timestamp — intake already archives the
-previous report before each run, so nothing is lost meanwhile), **2** (`regression_fixtures/` rename in
-`tests/test_pipeline.py`), **5** (`RUN A PROJECT.cmd` exit code).
+BACKLOG items **1** (reports into `<project>/_reconciliation/`, stamped per run, history beside them),
+**2** (`regression_fixtures/` + `projects/`) and **5** (launcher exit codes) were done on 2026-10-23;
+item 5 still wants one run on a Windows box, see `BACKLOG.md`.
 
 ---
 
@@ -143,7 +138,9 @@ outstanding · **2** intake/pipeline failed · **3** another run was in progress
 ### What to look at
 
 - `<projectsRoot>/index.json` — every project, folder and known address.
-- `<project>/_reconciliation/STATUS.md` — last run, counts, newest report; `archive/` keeps earlier reports.
+- `<project>/_reconciliation/STATUS.md` — last run, counts, newest report. The pipeline stamps every
+  report (`<slug>.<YYYYMMDD-HHMMSS>.reconciliation.md`) so earlier ones stay put; `archive/` is intake's
+  extra copy of the previous one, and `history/` feeds the "Changes since the last run" section.
 - `<projectsRoot>/_unmatched/<date>/WHY.md` — what intake could not place and why. Move the file, delete the line.
 - `<projectsRoot>/_needs_manual/*.md` — Beacon links the browser could not turn into a PDF. Download by hand, save into the project (or drop) folder, delete the note.
 

@@ -9,18 +9,18 @@ running the first two real projects.
 
 | # | Item | Status |
 |---|---|---|
-| 1 | Write outputs into the project folder | open |
-| 2 | A real `projects/` root | open |
+| 1 | Write outputs into the project folder | **DONE 2026-10-23** |
+| 2 | A real `projects/` root | **DONE 2026-10-23** |
 | 3 | Refuse to read half-synced OneDrive files | **DONE 2026-09-09** |
 | 4 | "What changed since last run" diff | **DONE 2026-09-09** |
-| 5 | Fix the launcher's exit code | open |
+| 5 | Fix the launcher's exit code | **DONE 2026-10-23** |
 
-> ⚠️ **Folder split — resolve before doing items 1, 2 or 5.**
-> The working code currently lives in `KCE -Document-Pipeline (b)`, while this
-> file sits alone in `KCE -Document-Pipeline`. OneDrive appears to have split the
-> folder. The `(b)` copy is the good one — 79 tests pass and both projects
-> reconcile. Consolidate to a single folder before further work, or changes will
-> land in the wrong place.
+> ⚠️ **Folder split — resolved 2026-10-23.**
+> The working code used to live in `KCE -Document-Pipeline (b)`, while this
+> file sat alone in `KCE -Document-Pipeline` after OneDrive split the folder.
+> The single place is now `kce-pipeline/` in the BMORE git repo (public):
+> code, config, docs and tests are versioned there; the regression fixtures and
+> the extraction cache stay in OneDrive and are git-ignored.
 
 Hand this file to Claude Code (or any developer) and say "do item 3" and it
 should have enough to work from without re-reading the whole task outline.
@@ -30,27 +30,34 @@ should have enough to work from without re-reading the whole task outline.
 ## Where things stand today
 
 ```
-KCE -Document-Pipeline/
+kce-pipeline/                 (in the BMORE repo; was KCE -Document-Pipeline (b))
 ├── RUN A PROJECT.cmd      drag a project folder onto this
 ├── CHECK SETUP.cmd        double-click diagnostics
+├── RUN INTAKE.cmd         sync + run-changed, for the scheduler
 ├── QUICKSTART.md          one-page guide for the team
 ├── kce.cmd                CLI wrapper (py + correct working directory)
 ├── BACKLOG.md             this file
-├── pipeline/
-│   ├── config/            canonical_fixtures.json, settings.json,
-│   │                      standard_piece_rates.json
-│   ├── kce_pipeline/      extract, normalize, transform, checks, report,
-│   │                      run, cli
-│   ├── extraction_cache/  per-document replay, keyed by SHA-256 of file bytes
-│   ├── out/               generated JSON + reports   <-- item 1 moves this
-│   ├── tests/             79 tests, all passing
-│   └── kce_pipeline/diff.py  run-to-run comparison (item 4)
-├── test_fixtures/         <-- item 2 renames/splits this
+├── README.md              intake + how the two packages fit
+├── PIPELINE_README.md     the pipeline's own README
+├── config/                canonical_fixtures.json, settings.json,
+│                          standard_piece_rates.json, intake.example.json
+├── kce_pipeline/          extract, normalize, transform, checks, report,
+│                          diff (item 4), run, cli
+├── kce_intake/            Outlook + drop-folder intake, files per MTX
+├── extraction_cache/      per-document replay, keyed by SHA-256 of file bytes
+│                          (git-ignored — lives in OneDrive only)
+├── regression_fixtures/   the two frozen known-good jobs (git-ignored)
 │   ├── steves_pools/      6 files,  MTX79857647
 │   └── Bob Bell/          10 files, MTX20616192
-├── reference/             Project_ROI_Tracker.jsx (target JSON shape)
+├── projects/              live jobs, one "MTX… - slug" folder each (git-ignored)
+│   └── <job>/_reconciliation/   that job's reports + history   <-- item 1
+├── tests/                 79 pipeline + 30 intake tests
 └── task/                  original task outline
 ```
+
+There is no `pipeline/` level any more: `kce_pipeline/`, `config/` and
+`extraction_cache/` sit directly in `kce-pipeline/`, and outputs live with each
+project rather than in a shared `out/`.
 
 **Two invariants that must never break.** Any change must keep these exact:
 
@@ -70,7 +77,7 @@ so regression checks cost nothing.
 
 ---
 
-## 1. Write outputs into the project folder
+## 1. Write outputs into the project folder  ✅ DONE
 
 **Why.** Results currently land in `pipeline/out/`, nowhere near the documents
 they describe. Worse, the filename is derived from the project name
@@ -100,9 +107,33 @@ documents; running it twice does not silently destroy the first report; and the
 regression runs for both known-good projects still produce their invariant
 totals.
 
+### ✅ BUILT 2026-10-23
+
+`--out` now defaults to `<project folder>/_reconciliation/` (`default_out_dir()`
+in `kce_pipeline/cli.py`) — a subfolder, so the source PDFs stay uncluttered,
+discovery never reads a report back in as an input, and it is the same folder
+`kce_intake` already passes with `--out` and reads the newest report from.
+
+Every run is stamped: `<slug>.<YYYYMMDD-HHMMSS>.project.json` and
+`<slug>.<YYYYMMDD-HHMMSS>.reconciliation.md` (`output_paths()`). Two runs inside
+one second get `_2`, `_3`… appended rather than clobbering each other, and the
+underscore keeps a plain name sort in run order. Nothing is ever overwritten;
+the previous report stays exactly where it was.
+
+Run history (item 4) moved beside the outputs: `<out>/history/<slug>/`, still
+pruned to the last 20. Snapshots recorded earlier under `<pipeline>/out/history/`
+are read once, when the new location is still empty, so the first run after the
+move keeps its "since last run" diff.
+
+`--out DIR` still works and uses the same stamped names, so the old shared-folder
+behaviour is one flag away. Intake is untouched: `runner.py` keeps archiving the
+previous report before each run (now a belt-and-braces copy) and picks the newest
+`*.project.json` / `*.reconciliation.md` by modification time, which the stamped
+names satisfy. 4 tests in `TestOutputLocation`; both invariant totals unchanged.
+
 ---
 
-## 2. A real `projects/` root instead of `test_fixtures/`
+## 2. A real `projects/` root instead of `test_fixtures/`  ✅ DONE
 
 **Why.** Bob Bell is a live job with real customer financial documents, and it is
 currently filed under a folder literally named "test fixtures". Anyone new to
@@ -126,6 +157,16 @@ safe.
 
 **Done when.** Real projects and regression fixtures live in visibly different
 places, and all 79 tests still pass.
+
+### ✅ BUILT 2026-10-23
+
+`test_fixtures/` is now `regression_fixtures/` (`FIXTURES = BASE /
+"regression_fixtures" / "steves_pools"` in `tests/test_pipeline.py`), and live
+jobs go under `projects/`, one `MTX… - slug` folder each, which is where
+`kce_intake` files documents. Both are git-ignored — the repo is public — so a
+new machine gets them from OneDrive, and the extraction cache (keyed by content,
+not path) needs nothing re-read. `QUICKSTART.md`, `PIPELINE_README.md` and the
+tree above describe the new layout. 79 pipeline tests still pass.
 
 ---
 
@@ -224,7 +265,8 @@ that invoice changed.
 
 `kce_pipeline/diff.py` — `snapshot()`, `compare()`, `render()`. History is kept
 at `pipeline/out/history/<slug>/<timestamp>.json`, last 20 runs, pruned
-automatically. Rendered at the top of the report and summarised in the console
+automatically. *(2026-10-23: item 1 moved it to `<project>/_reconciliation/history/<slug>/`;
+the old location is read once if the new one is still empty.)* Rendered at the top of the report and summarised in the console
 as a "Since last run" line.
 
 Comparison keys on `(severity, rule tag, fixtureType)` exactly as planned, so a
@@ -249,7 +291,7 @@ restoring both:
 
 ---
 
-## 5. Fix the launcher's exit code (cosmetic)
+## 5. Fix the launcher's exit code (cosmetic)  ✅ DONE
 
 **Why.** `RUN A PROJECT.cmd` returns **255** instead of **1** when run
 non-interactively, because the trailing `pause` gets EOF when there is no console
@@ -277,6 +319,28 @@ pattern and probably the same issue.
 **Done when.** `RUN A PROJECT.cmd <folder>` returns 0 or 1 matching the Python
 CLI, and double-clicking still holds the window open so the user can read the
 result.
+
+### ✅ BUILT 2026-10-23
+
+`RUN A PROJECT.cmd` and `CHECK SETUP.cmd` route every exit through one
+`:finish` label. The result is captured in `RESULT` first, and `pause` runs only
+when a person is there to see it — both must hold:
+
+- the script's own name appears in `CMDCMDLINE` (double-click / drag-and-drop
+  put it there; an open console window does not), and
+- `timeout /t 0` succeeds — it fails when stdin is redirected or absent, which
+  is exactly the case where `pause` used to hit end-of-input and kill cmd before
+  `exit /b` ran.
+
+`--no-pause` as the last argument, or `KCE_NO_PAUSE=1`, skips the pause outright
+for a scheduler that runs with a hidden console. Launcher-side failures (no
+Python, no folder given, folder missing) now return **2**, not 1, so they are
+never mistaken for "critical flags outstanding". `kce.cmd` never paused and is
+unchanged. `.gitattributes` keeps every `*.cmd` CRLF on checkout.
+
+Written in a Linux session, so the one thing still owed is a run on a Windows
+box: `cmd /c ""RUN A PROJECT.cmd" "<folder>" < nul" & echo %ERRORLEVEL%` should
+print 0 or 1 (never 255), and a double-click must still hold the window.
 
 ---
 

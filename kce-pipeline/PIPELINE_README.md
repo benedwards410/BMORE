@@ -16,15 +16,18 @@ python -m kce_pipeline "path/to/that_projects_folder"
 ```
 
 That's the whole interface. Drop the project's PDFs in a folder, point at the
-folder. Outputs land in `pipeline/out/`:
+folder. Outputs land in `<folder>/_reconciliation/`, beside the documents they
+were built from, and every run carries its own stamp so a re-run never
+overwrites the previous report:
 
-- `<project>.project.json` — the §6.1 schema, a drop-in for the ROI tracker
-- `<project>.reconciliation.md` — every discrepancy needing a human decision
+- `<project>.<YYYYMMDD-HHMMSS>.project.json` — the §6.1 schema, a drop-in for the ROI tracker
+- `<project>.<YYYYMMDD-HHMMSS>.reconciliation.md` — every discrepancy needing a human decision
+- `history/<project>/` — one snapshot per run, feeding the "Changes since the last run" section
 
 Useful flags:
 
 ```bash
-python -m kce_pipeline <folder> --out "C:/somewhere/else"   # choose output dir
+python -m kce_pipeline <folder> --out "C:/somewhere/else"   # choose output dir (same naming)
 python -m kce_pipeline <folder> --backend cache             # offline replay
 python -m kce_pipeline <folder> --backend api               # force live API
 ```
@@ -86,21 +89,25 @@ does not invalidate its entry, and editing one cannot silently reuse a stale one
 ## Layout
 
 ```
-pipeline/
+kce-pipeline/
 ├── config/
 │   ├── canonical_fixtures.json   ← EDIT THIS to teach new fixture names
-│   └── settings.json             ← tolerances and policy knobs
+│   ├── settings.json             ← tolerances and policy knobs
+│   └── standard_piece_rates.json ← KCE's standing rate card
 ├── kce_pipeline/
 │   ├── extract.py      two-pass document reading + both backends + all prompts
 │   ├── normalize.py    canonical vocabulary, size classes, defensive parsing
 │   ├── transform.py    raw rows → §6.1 arrays (one function per doc type)
 │   ├── checks.py       the nine §8 behaviors → flags[]
 │   ├── report.py       Markdown reconciliation report
+│   ├── diff.py         "what changed since the last run"
 │   └── run.py / cli.py orchestration and entry point
-├── extraction_cache/   content-addressed extraction replays
-├── out/                generated JSON + reports
-└── tests/              55 tests
+├── extraction_cache/   content-addressed extraction replays (git-ignored)
+├── regression_fixtures/ the two frozen known-good projects (git-ignored)
+└── tests/              79 pipeline tests + the intake suite
 ```
+
+Outputs are not kept here: each project folder gets its own `_reconciliation/`.
 
 ```bash
 python -m unittest discover -s tests -v
