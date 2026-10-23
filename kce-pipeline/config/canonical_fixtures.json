@@ -1,0 +1,114 @@
+{
+  "_comment": "Canonical fixture-type vocabulary and matching rules (task outline 6.2). EDIT THIS FILE to teach the pipeline new fixture names -- no extraction code changes required. Matching order: exact canonical name, then rules below sorted by priority (low first), then fuzzy fallback, then 'unknown' + flag.",
+  "version": 3,
+
+  "canonicalTypes": [
+    "8' Strip", "4' Strip", "2' Strip",
+    "High Bay",
+    "2x2 Volumetric Kit", "2x4 Volumetric Kit",
+    "Flat Panel",
+    "Wrap Fixture",
+    "Vapor Tight 8'", "Vapor Tight 4'", "Vapor Tight 2'",
+    "Wall Pack",
+    "Flood Light",
+    "Pole Light",
+    "Recessed Can",
+    "Photocell", "EM Battery Backup", "Lens and Wire Guard",
+    "Sensor - Basic", "Sensor - Advance", "Sensor - Unspecified"
+  ],
+
+  "_componentTypesComment": "Section 6.2 / 8.5: these are component labels used inside a parent fixture's components[]. They are NEVER independent top-level fixture types and are excluded from the ordered/approved/installed reconciliation in 8.8.",
+  "componentTypes": ["Photocell", "EM Battery Backup", "Lens and Wire Guard"],
+
+  "_sensorTypesComment": "Section 8.6: sensors ARE first-class top-level types. Accessory-grouping (8.5) must never be applied to them. 'Sensor - Unspecified' covers a contractor line that bills sensor installs without naming a tier -- per KCE, the installer's rate is the same for Basic and Advance, so tier is a BGE cost distinction only, never an install-billing one.",
+  "sensorTypes": ["Sensor - Basic", "Sensor - Advance", "Sensor - Unspecified"],
+
+  "_skuMapComment": "AUTHORITATIVE exact-SKU lookup, checked BEFORE any text rule. A distributor part number is unambiguous where its description is not -- e.g. ESPVEFT2X28... reads like a 2x2 volumetric but KCE confirms it is a 2' Strip. Source: Bob Bell Ford Inventory Reconciliation (KCE-maintained). Add a row here whenever a new SKU is confirmed; it beats every heuristic.",
+  "skuMap": {
+    "ESPRCHHE875WSCSLPRUNV12AWHSRBKEIIFS108": "8' Strip",
+    "ESPRCHHE435WSCSLPRUNV12AWHSRBKEIIFS108": "4' Strip",
+    "ESPVEFT2X28TADSRB20W25W30WKEIIFS108": "2' Strip",
+    "ESPRFHB23185WSCSHBDUNV12AWHSRPWKEIEFS106": "High Bay",
+    "ESPVEKT2X28TADSRB20W25W30WKEIIFS108": "2x2 Volumetric Kit",
+    "ESPVEKT2X48TADSRB25W30W34WKEIIFS108": "2x4 Volumetric Kit",
+    "ESPREVT890WSCSUNV12A": "Vapor Tight 8'",
+    "ESPREVT445WSCSUNV12A": "Vapor Tight 4'",
+    "ESPLUMIPACK65WSCSUNV10VBZBPC": "Wall Pack",
+    "ESPVSRD6R17WSCS5WODUNV10V": "Recessed Can",
+    "KEIIFS108": "Sensor - Unspecified",
+    "KEIIFS106": "Sensor - Unspecified"
+  },
+
+  "_rulesComment": "A rule matches when every regex in 'all' matches, at least one in 'any' matches (or 'any' is empty), and none in 'none' match. Text is lowercased and whitespace-collapsed first. Lower priority wins, so primary fixtures (10) beat accessories (50) on strings like 'Exterior LED 70W Flood, Photocell w/ knuckle'.",
+  "rules": [
+    { "canonical": "Sensor - Advance", "priority": 5, "all": ["sensor"], "any": ["advance", "advanced"] },
+    { "canonical": "Sensor - Basic",   "priority": 5, "all": ["sensor"], "any": ["basic"] },
+    { "canonical": "Sensor - Unspecified", "priority": 6, "all": ["sensor"], "any": ["install", "commission", "programming"], "none": ["photocell", "lens", "\\bwith\\b", "fixture"] },
+
+    { "canonical": "Vapor Tight 8'", "priority": 10, "all": ["vapor\\s*-?\\s*tight"], "any": ["\\b8\\s*(?:ft|foot|feet|')", "\\b8ft\\b"] },
+    { "canonical": "Vapor Tight 4'", "priority": 10, "all": ["vapor\\s*-?\\s*tight"], "any": ["\\b4\\s*(?:ft|foot|feet|')", "\\b4ft\\b"] },
+    { "canonical": "Vapor Tight 2'", "priority": 10, "all": ["vapor\\s*-?\\s*tight"], "any": ["\\b2\\s*(?:ft|foot|feet|')", "\\b2ft\\b"] },
+
+    { "canonical": "Wall Pack",  "priority": 10, "any": ["wall\\s*pack", "wallpack", "wall\\s*mount"] },
+    { "canonical": "Flood Light", "priority": 10, "any": ["flood"] },
+    { "canonical": "Pole Light",  "priority": 10, "any": ["pole\\s*light", "parking\\s*lot\\s*light", "area\\s*light"] },
+
+    { "canonical": "High Bay", "priority": 10, "any": ["high\\s*bay", "hi-?\\s*bay", "highbay"] },
+
+    { "canonical": "2x4 Volumetric Kit", "priority": 12, "all": ["volumetric|cent(?:er|re)\\s*basket|troffer|ret[or]{2}fit\\s*kit|retrofit\\s*kit"], "any": ["2\\s*[x×]\\s*4", "\\b4\\s*(?:ft|foot|feet|')", "\\b4ft\\b"] },
+    { "canonical": "2x2 Volumetric Kit", "priority": 12, "all": ["volumetric|cent(?:er|re)\\s*basket|troffer|ret[or]{2}fit\\s*kit|retrofit\\s*kit"], "any": ["2\\s*[x×]\\s*2", "\\b2\\s*(?:ft|foot|feet|')", "\\b2ft\\b"] },
+
+    { "canonical": "Flat Panel", "priority": 15, "any": ["flat\\s*panel", "troffer"] },
+
+    { "canonical": "Wrap Fixture", "priority": 15, "any": ["\\bwrap\\b"] },
+
+    { "canonical": "8' Strip", "priority": 20, "all": ["strip"], "any": ["\\b8\\s*(?:ft|foot|feet|')", "\\b8ft\\b"] },
+    { "canonical": "4' Strip", "priority": 20, "all": ["strip"], "any": ["\\b4\\s*(?:ft|foot|feet|')", "\\b4ft\\b"] },
+    { "canonical": "2' Strip", "priority": 20, "all": ["strip"], "any": ["\\b2\\s*(?:ft|foot|feet|')", "\\b2ft\\b"] },
+
+    { "canonical": "Recessed Can", "priority": 20, "any": ["recessed\\s*can", "downlight", "\\bcan\\b"] },
+
+    { "canonical": "EM Battery Backup", "priority": 50, "any": ["em\\s*battery", "battery\\s*backup", "emergency\\s*battery"] },
+    { "canonical": "Photocell", "priority": 50, "any": ["photocell", "photo\\s*cell", "photo-?eye"] },
+    { "canonical": "Lens and Wire Guard", "priority": 50, "any": ["wire\\s*guard", "lens\\s*and\\s*wire", "lens\\s*kit"] }
+  ],
+
+  "_sizeClassComment": "Section 8.6: sizeClass is DELIBERATELY coarser than canonical fixtureType -- 4' Strip and 2x4 Volumetric Kit are distinct canonical types but share sizeClass '4ft'. Sensor validation sums by THIS field, never by fixtureType. First matching rule wins.",
+  "sizeClassRules": [
+    { "sizeClass": "High Bay", "any": ["high\\s*bay", "hi-?\\s*bay", "highbay", "\\bhb\\b"] },
+    { "sizeClass": "Exterior", "any": ["wall\\s*pack", "wallpack", "wall\\s*mount", "flood", "pole\\s*light", "parking\\s*lot", "exterior", "\\bknuckle\\b"] },
+    { "sizeClass": "8ft", "any": ["\\b8\\s*(?:ft|foot|feet|')", "\\b8ft\\b"] },
+    { "sizeClass": "4ft", "any": ["\\b4\\s*(?:ft|foot|feet|')", "\\b4ft\\b", "2\\s*[x×]\\s*4"] },
+    { "sizeClass": "2ft", "any": ["\\b2\\s*(?:ft|foot|feet|')", "\\b2ft\\b", "2\\s*[x×]\\s*2"] }
+  ],
+
+  "_wattageTierComment": "Section 4.1 / 8.7: categories whose piece rate depends on wattage. Used to (a) keep two-tier categories from collapsing into one rate row, and (b) decide when a contractor line's missing wattage warrants a flag. High Bay and Pole Light are tiered in the current KCE rate card even though both tiers currently price identically -- they are modeled separately because they could diverge.",
+  "wattageTiers": {
+    "Wall Pack":   [{ "tier": "<50W",   "maxW": 50 },  { "tier": ">50W",   "minW": 50 }],
+    "Flood Light": [{ "tier": "<50W",   "maxW": 50 },  { "tier": ">50W",   "minW": 50 }],
+    "Pole Light":  [{ "tier": "<=150W", "maxW": 150 }, { "tier": ">150W",  "minW": 150 }],
+    "High Bay":    [{ "tier": "<=150W", "maxW": 150 }, { "tier": ">150W",  "minW": 150 }]
+  },
+
+  "_accessoryRulesComment": "Section 8.5 rule table. 'parentSizeClasses' restricts which parent a photocell may attach to; an accessory whose type is absent here falls through to needs_confirmation.",
+  "accessoryRules": {
+    "Photocell": {
+      "confidence": "certain",
+      "flag": false,
+      "parentSizeClasses": ["Exterior"],
+      "note": "Always pairs with the exterior fixture on the same Line/Location (Wall Pack, Flood Light, Pole Light)."
+    },
+    "EM Battery Backup": {
+      "confidence": "needs_confirmation",
+      "flag": true,
+      "parentSizeClasses": ["2ft", "4ft", "8ft", "High Bay"],
+      "note": "Typically pairs with an interior fixture on the same Line/Location. Always raise a confirmation flag, even when the pairing looks obvious."
+    },
+    "Lens and Wire Guard": {
+      "confidence": "needs_confirmation",
+      "flag": true,
+      "parentSizeClasses": [],
+      "note": "Accessory with no association rule in the 8.5 table -- grouped with the fixture sharing its Line/Location, but that pairing is a guess and must be confirmed."
+    }
+  }
+}

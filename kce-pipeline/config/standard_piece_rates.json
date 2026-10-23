@@ -1,0 +1,107 @@
+{
+  "_comment": "KCE's STANDARD subcontractor piece rate schedule -- the standing rate card that applies to ~99% of projects. Used automatically when a project folder contains no rate schedule of its own. When a project DOES supply one, the project's card wins and every difference from these rates is flagged so the deviation is visible and deliberate (e.g. Bob Bell: -$2/fixture because one contractor installed and another commissioned the sensors).",
+  "_source": "Derived from KCE_Piece_Rate_Schedule.pdf (Steve's Pools batch).",
+  "effectiveDate": "2026-06-01",
+  "rates": [
+    {
+      "fixtureType": "Flat Panel",
+      "wattageTier": null,
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "2x2 Volumetric Kit",
+      "wattageTier": null,
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "2x4 Volumetric Kit",
+      "wattageTier": null,
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "EM Battery Backup",
+      "wattageTier": null,
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "2' Strip",
+      "wattageTier": null,
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "4' Strip",
+      "wattageTier": null,
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "8' Strip",
+      "wattageTier": null,
+      "contractedRate": 65.0
+    },
+    {
+      "fixtureType": "Wrap Fixture",
+      "wattageTier": null,
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "Vapor Tight 2'",
+      "wattageTier": null,
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "Vapor Tight 4'",
+      "wattageTier": null,
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "Vapor Tight 8'",
+      "wattageTier": null,
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "Recessed Can",
+      "wattageTier": null,
+      "contractedRate": 30.0
+    },
+    {
+      "fixtureType": "High Bay",
+      "wattageTier": "<=150W",
+      "contractedRate": 75.0
+    },
+    {
+      "fixtureType": "High Bay",
+      "wattageTier": ">150W",
+      "contractedRate": 75.0
+    },
+    {
+      "fixtureType": "Wall Pack",
+      "wattageTier": "<50W",
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "Wall Pack",
+      "wattageTier": ">50W",
+      "contractedRate": 75.0
+    },
+    {
+      "fixtureType": "Flood Light",
+      "wattageTier": "<50W",
+      "contractedRate": 50.0
+    },
+    {
+      "fixtureType": "Flood Light",
+      "wattageTier": ">50W",
+      "contractedRate": 75.0
+    },
+    {
+      "fixtureType": "Pole Light",
+      "wattageTier": "<=150W",
+      "contractedRate": 75.0
+    },
+    {
+      "fixtureType": "Pole Light",
+      "wattageTier": ">150W",
+      "contractedRate": 75.0
+    }
+  ]
+}
