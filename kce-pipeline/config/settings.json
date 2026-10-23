@@ -1,0 +1,47 @@
+{
+  "_comment": "Operational knobs for the KCE document intake pipeline. Nothing here is hardcoded in the extraction or check code.",
+  "quantityTolerance": 0,
+  "_quantityToleranceComment": "Section 8.8: max allowed difference between ordered / approved / installed before a critical flag fires. Default 0 = flag any difference at all. This is a knob, not a hardcoded skip.",
+  "centsTolerance": 0.005,
+  "_centsToleranceComment": "Float comparison slack for the totalCost == programShare + customerShare identity and the SubTotals batch check.",
+  "sensorSizeClassUnknownPolicy": "skip_with_info",
+  "_sensorSizeClassUnknownPolicyComment": "ASSUMPTION -- NOT SPECIFIED BY THE TASK OUTLINE. Section 8.6 tells us to derive a sensor row's size class from its Location text or its Existing/Proposed Description, but gives no rule for when neither states one (the Detailed Cost Report's sensor rows in the Steve's Pools fixture set are exactly this case: 'Integrated Fixture Sensor Smart Interior Advance/Basic', no size anywhere, split 6 and 7 against 13 matching fixtures). Options: 'skip_with_info' = do not run the check, raise an info flag saying so (default -- never invents an answer, never emits a false critical); 'document_totals' = compare all sensor rows in the document against all size-class-derivable fixture rows (6+7 vs 2+1+10, passes here, but looser than 8.6 describes); 'borrow_from_sibling' = adopt a size class stated on another BGE document in the same batch (infers across documents). Change this one string to switch behavior.",
+  "rollUpSensorTiersForReconciliation": true,
+  "_rollUpSensorTiersComment": "Section 8.8 vs 8.6. Basic/Advance is a BGE cost-model distinction; the installing contractor bills the same rate either way and routinely omits the tier. With this true, all sensor tiers reconcile as one pool so an untiered install line does not manufacture a false mismatch. Tier disagreements BETWEEN BGE documents are still flagged separately by 8.6.",
+  "fuzzyMatchThreshold": 0.82,
+  "_fuzzyMatchThresholdComment": "Section 6.2: exact match first, then the rule table, then this difflib ratio against canonical names. Below it, the pipeline refuses to invent a canonical name and flags the value instead.",
+  "extraction": {
+    "backend": "auto",
+    "_backendComment": "'auto' = use the live Anthropic API when ANTHROPIC_API_KEY is present, otherwise replay from the extraction cache. 'api' = require the API. 'cache' = require the cache (offline / regression runs).",
+    "model": "claude-sonnet-5",
+    "maxTokens": 16000,
+    "cacheDir": "extraction_cache"
+  },
+  "documentTypes": [
+    "piece_rate_schedule",
+    "supplier_invoice",
+    "proposal_detail",
+    "detailed_cost",
+    "contractor_invoice",
+    "inventory_reconciliation",
+    "credit_calculation",
+    "unknown"
+  ],
+  "mtxExemptTypes": [
+    "piece_rate_schedule",
+    "inventory_reconciliation"
+  ],
+  "_mtxExemptComment": "Section 8.9: the piece rate schedule is a standing rate card with no MTX number and must be exempt from the batch consistency check.",
+  "workOrderSourceTypes": [
+    "proposal_detail"
+  ],
+  "_workOrderSourceComment": "Section 8.4: ONLY the Proposal Detail populates workOrderLines[]. The Detailed Cost Report is added here only as a fallback when no proposal_detail is present in the batch, and then only after its Material/Labor row pairs are de-duplicated.",
+  "inputExtensions": [
+    ".pdf",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".webp",
+    ".gif"
+  ]
+}

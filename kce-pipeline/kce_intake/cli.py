@@ -24,6 +24,12 @@ def setup_logging(cfg: Config, verbose: bool) -> None:
         handler.close()
     root.setLevel(logging.DEBUG if verbose else logging.INFO)
     fmt = logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s")
+    # A Windows console is often cp1252; a subject line or arrow must not crash a log call.
+    if hasattr(sys.stdout, "reconfigure"):
+        try:
+            sys.stdout.reconfigure(errors="replace")
+        except (ValueError, OSError):
+            pass
     console = logging.StreamHandler(sys.stdout)
     console.setFormatter(logging.Formatter("%(message)s"))
     root.addHandler(console)
@@ -33,6 +39,14 @@ def setup_logging(cfg: Config, verbose: bool) -> None:
         root.addHandler(fh)
     except OSError:
         pass
+
+
+def teardown_logging() -> None:
+    """Close the file handler so the log is not left locked (Windows) between runs."""
+    root = logging.getLogger("kce_intake")
+    for handler in list(root.handlers):
+        root.removeHandler(handler)
+        handler.close()
 
 
 def _open(cfg: Config):
@@ -181,6 +195,13 @@ def main(argv: list[str] | None = None) -> int:
         print(exc, file=sys.stderr)
         return 2
     setup_logging(cfg, args.verbose)
+    try:
+        return _dispatch(cfg, args)
+    finally:
+        teardown_logging()
+
+
+def _dispatch(cfg: Config, args) -> int:
     handlers = {"login": cmd_login, "sync": cmd_sync, "run-changed": cmd_run_changed, "status": cmd_status}
     if args.command == "status" or args.command == "login":
         return handlers[args.command](cfg, args)
