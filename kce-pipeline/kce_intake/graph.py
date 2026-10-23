@@ -124,7 +124,7 @@ class GraphClient:
     # ---- MailClient protocol -------------------------------------------
     def list_messages_since(self, since: datetime) -> Iterator[dict]:
         params = {
-            "$filter": f"hasAttachments eq true and receivedDateTime ge {iso(since)}",
+            "$filter": f"receivedDateTime ge {iso(since)} and hasAttachments eq true",  # orderby property must lead the filter or Graph returns InefficientFilter
             "$select": MESSAGE_SELECT,
             "$orderby": "receivedDateTime asc",
             "$top": "50",
