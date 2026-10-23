@@ -175,7 +175,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    cfg = load_config(args.config)
+    try:
+        cfg = load_config(args.config)
+    except FileNotFoundError as exc:
+        print(exc, file=sys.stderr)
+        return 2
     setup_logging(cfg, args.verbose)
     handlers = {"login": cmd_login, "sync": cmd_sync, "run-changed": cmd_run_changed, "status": cmd_status}
     if args.command == "status" or args.command == "login":
