@@ -106,6 +106,48 @@ Hurtful or beneficial depends on which number you stand on. The exponentials bel
 6. **What to count.** Benchmarks are exponential and report cards are falling. Which one is progress?
 7. **Who keeps the productivity.** If AI delivers a 2.7 percent year and the top 1 percent already holds a third of the wealth, does the gain change that share or confirm it?
 
+## The crucial issue: private models, or public?
+
+**Three things called "public."** The word hides three different objects, and the argument changes with each.
+
+1. The shared service: one model, run by one company, used by everyone through an API. ChatGPT at 900 million weekly users is this.
+2. The commons: open weights anyone can download and run. DeepSeek, Qwen, gpt-oss, Gemma.
+3. The public option: a model funded and published by a public body, with its data and code open, the way a public library or a public broadcaster is public. Switzerland's Apertus, released in 2025 with training data disclosed, is the clearest case.
+
+"Private" means one thing: a model you run, or control, on hardware or under terms that are yours, whose logs and memory never leave you.
+
+**The case for private.**
+
+- Control. Your data never leaves. There are no logs for a Siren Server to harvest and no terms of service that change under you. This is the only condition under which "act for only you" can be true.
+- Loyalty. A model you host cannot be quietly retuned to favor a merchant, an advertiser, or a government. Its objective is whatever you set.
+- Resilience. It works offline, cannot be repriced, cannot be switched off, and cannot be re-aligned by a vendor's update.
+- Diversity. One shared model shapes everyone's prose, arguments, and first drafts the same way. A million private models drift in a million directions. Lanier's oldest fear, from Digital Maoism onward, is the single voice that replaces all voices. Private models are the structural answer.
+- Cost at scale. After the hardware, inference is nearly free. The rented model charges rent forever.
+
+**The case for public.**
+
+- Capability. A frontier run costs hundreds of millions of dollars. The private model on your laptop is small and months to a year behind. For the hard problems, medicine, science, serious code, the shared frontier wins, and the gap reopens every five months.
+- The aggregate is the value. A model trained only on you knows only you. The thing that makes a model useful is that it carries the writing of millions of people. That is Lanier's own description of what a model is: a collaboration. A purely private model opts out of the collaboration.
+- Correction. A shared model can be patched in an hour when it is found to be harmful. A million private copies cannot be recalled. Every bad fine-tune lives forever.
+- Access. The poor do not own GPUs. The free tier of the shared model is the only model most of the world will ever use.
+- Provenance and payment. Here is the irony. Data dignity, tracing which people a model drew on and paying them, is easier to run at one point than at a million. A public model with a ledger can pay its contributors. A million private models cannot be audited for what they trained on.
+
+**What 2026 says.** Both cases are true at once, which is why neither pure answer holds. The shared frontier wins on capability and loses on loyalty: its agent layer is wired to merchants and its memory sits in the vendor's database. The private model wins on loyalty and loses on knowledge: a 3-billion-parameter phone model and a 30-billion laptop model handle everyday work and fail on the hard problems. The commons sits between, close to the frontier and runnable at home, but built by a few labs whose training data stays secret, so it is public in use and private in production.
+
+**Lanier's test, applied.** His question is not where the weights live. It is whether the people are visible. A private model with no provenance still hides the people in its base; it is a Siren Server you happen to own. A public model with provenance and payment makes them visible; it is a collaboration with a ledger. So the private-versus-public question is really three questions about three layers:
+
+| Layer | Best home | Why |
+|---|---|---|
+| The base: knowledge, language, the collaboration of millions | Public, as a commons or a public option, with provenance and payment | Only a shared base carries everyone's work, and only a shared base can pay them |
+| The personal layer: your files, memory, preferences, style | Private, local, yours | This is the only place loyalty and control can be guaranteed |
+| The action layer: the agent that buys, books, writes, negotiates | Private, loyal to you, reaching the public frontier only through you | An agent hosted by the vendor acts for the vendor |
+
+**So which is best?** Private for what is yours. Public for what is everyone's. And the seam between them is the whole fight. The best configuration in 2026 is a private front end that you own, holding your data and your agent, which rents the public frontier for hard problems through a channel you control, sending the question and not the life. Behind that frontier, a base that is a commons with a ledger, so the people inside it are paid.
+
+What fails is each pure answer. Pure private is a hermit with a small model: safe, loyal, and ignorant. Pure public is 900 million people inside one company's model: capable, convenient, and owned. The 2000 essay's warning fits the pure public case exactly: a single belief system, written into the software everyone lives inside. The 2006 essay's warning fits it too: one voice for all. Lanier's answer in both cases was not to flee the collaboration but to keep the people visible inside it. That is the argument for the stack, and against either pole.
+
+**The motion.** "This house believes the personal layer of AI must be private by default, and the base must be public with provenance." The opposition will say the stack is too complicated for ordinary people. The proposition's answer: so was the banking system, and nobody keeps their money in the bank's name.
+
 ## Dilemmas 1, 2, 3 and 6, expanded
 
 ### 1. Open weights versus safety
