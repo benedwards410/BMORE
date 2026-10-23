@@ -106,4 +106,40 @@ Hurtful or beneficial depends on which number you stand on. The exponentials bel
 6. **What to count.** Benchmarks are exponential and report cards are falling. Which one is progress?
 7. **Who keeps the productivity.** If AI delivers a 2.7 percent year and the top 1 percent already holds a third of the wealth, does the gain change that share or confirm it?
 
+## Dilemmas 1 and 3, expanded
+
+### 1. Open weights versus safety
+
+**The dilemma.** A frontier-class model can be published as downloadable weights that anyone can run, copy, and modify, or it can be kept behind an API run by one of about five companies. Each choice removes a different kind of risk and creates a different kind of power.
+
+**The case for open weights.** Price and access: DeepSeek's open release in January 2025 showed that a model months behind the frontier could be run at a fraction of the cost, and the gap has stayed at months, not years. Sovereignty: governments, hospitals, and companies can run intelligence they do not have to rent, on hardware they control, under laws they wrote. Audit: researchers can inspect what a closed vendor only describes. Resilience: nobody's terms of service can switch the model off. Even the closed labs conceded the point in part. OpenAI shipped its gpt-oss models under a permissive license in August 2025, and the July 2025 U.S. AI Action Plan told agencies to encourage open-weight models.
+
+**The case for closed.** Irreversibility: weights, once published, cannot be recalled, and the safety training on them can be stripped with a small, cheap fine-tune. Uplift: the worry is not chatbots but help with biological and cyber attacks, where a single misuse can outweigh a million ordinary uses. Governance: rules written in 2026 cannot be applied to a file copied in 2025. And the open frontier in 2026 is mostly Chinese, DeepSeek, Qwen, Kimi, GLM, so "open" also means depending on another government's release decisions. Meta, the American standard-bearer for open weights, moved its frontier work closed in April 2026.
+
+**What both sides miss.** Open weights decentralize use, not production. A frontier training run costs hundreds of millions of dollars, so the base model is still shaped by a few labs and two governments whichever way the weights go. Lanier's position cuts across the debate: the danger he names is people treating any model, open or closed, as an oracle, and letting agents act for them. He has argued against software agents since 1995. Open weights with no provenance are still a Siren Server for whoever hosts them. Closed weights with provenance and payment would at least keep the people inside the model visible.
+
+**The motion to debate.** "This house believes the greater risk is concentration, not misuse." The side arguing misuse must explain how it will govern files it cannot recall. The side arguing concentration must explain why a Chinese open model is less of a dependency than an American closed one.
+
+### 3. Who gets paid
+
+**The ledger, as of 2026.** Platforms got paid: Reddit's licensing deal with Google was reported at about $60 million a year in 2024, and News Corp's with OpenAI at about $250 million over five years. Rights-holders with lawyers got paid: Anthropic agreed in September 2025 to pay authors $1.5 billion, about $3,000 a book. Users got nothing. The people who wrote the Reddit posts, the forum answers, the reviews, and the code comments that trained the models received no check, no credit, and no notice.
+
+**The catch in the Anthropic money.** The June 2025 ruling in that case found that training on lawfully bought books was fair use. What was not fair use was downloading pirated copies. The $1.5 billion paid for how the books were obtained, not for what they contributed. So far, American law pays for the acquisition of data, not for the value it creates. That is the opposite of data dignity, which pays for value.
+
+**Three ways the money can flow.**
+
+| Route | Who gets paid | What it needs | Who it misses |
+|---|---|---|---|
+| Licensing | The platform that holds the data | A contract | Everyone who made the data |
+| Litigation | Rights-holders who can sue | A statute and a class action | Everyone without a registered copyright |
+| Data dignity | The individual contributor, continuously | Provenance inside the model, plus intermediaries to bargain | Nobody, if the tracing works |
+
+**Right or product.** If payment is a product, it is opt-in, market-priced, and in practice set to zero by terms of service, which is the current state. If it is a right, it is non-waivable, like a minimum wage, and the per-person triviality is solved the way wages solved it: collectively. Lanier and Weyl's 2018 blueprint proposed exactly that, mediators of individual data that bargain for groups of contributors the way unions bargain for workers. Reddit already behaves like a mediator for its users. It just keeps the money.
+
+**The objections, and the answers.** Attribution is impossible at trillion-token scale: it is hard, and it is being worked on, and the European Union has required training-data summaries from general-purpose model makers since August 2025, which is the first step. Micropayments are trivial: per person, yes, which is why the mediator exists. It would entrench the platforms as paymasters: only if the mediators are the platforms, which is the design choice to fight over. Data is not labor: a fair philosophical point that does not change where the money is going.
+
+**Why it is urgent now.** The old payment was traffic. People wrote for free because readers came, and readers brought ads, donations, and reputation. In 2025 human visits to Wikipedia fell by roughly eight percent as AI answers replaced clicks. When the model answers instead of the page, the traffic payment stops, and nothing replaces it. The fork here is not whether contributors get paid. It is whether the stop in payment is noticed before the contributors stop contributing.
+
+**The motion to debate.** "This house would make payment for training data a non-waivable right of the individual contributor." The opposition's strongest line: users were paid in free services. The proposition's answer: so were the sailors who heard the Sirens.
+
 **Sources behind the numbers:** NAEP releases (NAGB, Jan and Sept 2025); WFH Research (Barrero, Bloom, Davis); Zoom 2020 earnings commentary; USDA school-meal waivers; Aspen Institute Project Play (2020, 2023, 2025); GAO and SBA Office of Inspector General fraud estimates; NCMEC CyberTipline annual reports; FTC consumer fraud data; CDC Youth Risk Behavior Survey (2021, 2023); U.S. Surgeon General advisory (May 2023); KFF and Ballotpedia phone-ban trackers (2025); BLS CPI; Census Bureau income reports (Sept 2025, Sept 2026); Federal Reserve Distributional Financial Accounts; OpenAI user announcements (Feb 2026); company capex guidance (2026); Epoch AI compute trends; Anthropic authors' settlement (Sept 2025); IATA 2025 traffic report.
