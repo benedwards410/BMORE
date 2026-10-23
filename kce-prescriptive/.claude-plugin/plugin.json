@@ -1,0 +1,9 @@
+{
+  "name": "kce-prescriptive",
+  "version": "0.1.0",
+  "description": "Key Commercial Electric: turn a lighting audit into a BGE Energy Solutions for Business prescriptive package (BGE workbook, proposal, T&C, cut sheets, portal cheat sheet) behind a QA gate. Drafts only; nothing is submitted without a go.",
+  "author": {
+    "name": "Key Commercial Electric"
+  },
+  "keywords": ["kce", "bge", "prescriptive", "energy-solutions-for-business", "lighting-retrofit", "empower-maryland"]
+}
