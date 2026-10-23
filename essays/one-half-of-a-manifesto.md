@@ -112,7 +112,7 @@ The bill arrived in the statistics people watch most closely.
 | Chronic absenteeism | About 15% of students (2018-19) | 28% (2021-22); still roughly 23% to 26% in 2023-24, depending on the tracker. 31% of 12th graders reported missing 3 or more days in the prior month in 2024, up from 25% in 2019. | Return to Learn; AEI; NCES |
 | Prices (CPI) | January 2020 | Up about 25% by late 2025, and rising 3.7% a year as of September 2026 | CNBC; BLS |
 | Household income (real median) | About $85,300 (2019, in 2025 dollars) | $87,460 (2025), a record, but only about 2.5% above 2019. Top-decile earnings rose 1.7% in 2025; the bottom decile showed no measurable gain. | Census; Axios |
-| Wealth (Fed accounts) | | Top 1% held 32.5% of US household net worth in the second quarter of 2026; the top 0.1% held 15.0%; the bottom half held about 2.5%. | Fed DFA via FRED |
+| Wealth (Fed accounts) | | Top 1% held 32.5% of US household net worth in the second quarter of 2026; the top 0.1% held 15.0%; the bottom half held about 2.3%. | Fed DFA via FRED |
 | Online crime losses (FBI IC3) | $3.5 billion, 467,361 complaints (2019) | $16.6 billion (2024); $20.9 billion and 1,008,597 complaints (2025). People 60 and over lost $7.75 billion. AI-enabled crime was counted for the first time: about 22,000 complaints, $893 million. | FBI IC3 |
 | Phones in school | | By mid-2026, 42 of the 50 states and DC had statewide rules restricting student phones. | JAMA Pediatrics, via Deseret News |
 
@@ -170,7 +170,7 @@ Yes, and it is visible in the numbers. On one side, 3 million open models and a 
 
 | Word | Verdict | Why |
 | --- | --- | --- |
-| Euphoric | No | The gains are not shared. The bottom decile's income did not move in 2025, and the bottom half of households holds about 2.5% of wealth. |
+| Euphoric | No | The gains are not shared. The bottom decile's income did not move in 2025, and the bottom half of households holds about 2.3% of wealth. |
 | Dystopian | No | Dystopia needs lock-in. Open weights exist, local inference works, a court priced training data, and 42 states pulled phones out of classrooms. The fork has not closed. |
 | Mediocre | No | The capability jump is real. A machine passed the three-party Turing test, and a quarter of Google's code is machine-written. |
 | Disappointing | Half | Stewardship, not technology. The costs of 2020 to 2022 fell on the people with the least slack, and almost no one has been paid for the data. |
