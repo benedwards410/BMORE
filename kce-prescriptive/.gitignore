@@ -1,0 +1,12 @@
+# BGE's workbook carries ICF's "do not distribute" notice: keep it local.
+templates/bge/
+# Customer data and generated packages never go in git.
+out/
+fixtures-local/
+__pycache__/
+*.pyc
+# KCE-internal: prices, submitter contact
+config/*.local.json
+# Derived from BGE's workbook (ICF notice): regenerate locally with extract-template / audit-template
+references/template_tables.json
+templates/audit-template.xlsx

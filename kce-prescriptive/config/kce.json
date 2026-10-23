@@ -1,0 +1,42 @@
+{
+ "notes": "KCE defaults (committed; this repo is public). Put the workbook submitter's contact, prices, and anything else internal in config/kce.local.json, which overrides this file and is gitignored.",
+ "company": {
+  "name": "Key Commercial Electric",
+  "legal_name": "Key Commercial Electric LLC",
+  "street": "5548 April Journey",
+  "city": "Columbia",
+  "state": "MD",
+  "zip": "21044",
+  "phone": "(410) 218-8979",
+  "email_domain": "key-cre.com"
+ },
+ "workbook_submitter": {
+  "company": "Key Commercial Electric LLC",
+  "contact": null,
+  "phone": null,
+  "email": null
+ },
+ "utility": "BGE",
+ "payee_default": "contractor",
+ "pricing": {
+  "recycling_pct": 1.0,
+  "tax_pct": 3.0
+ },
+ "savings": {
+  "hours_per_week": 60,
+  "rate_cents_per_kwh": 16.84,
+  "rate_basis": "the 2026 Maryland commercial average",
+  "maintenance": {
+   "labor_rate": 75,
+   "lamp_minutes": 15,
+   "ballast_minutes": 45,
+   "lamp_part": 5.0,
+   "ballast_part": 35.0,
+   "lamp_life_hours": 30000,
+   "ballast_life_hours": 60000,
+   "assumption_note": "lamp_part, ballast_part and the two life-hours values are INFERRED (back-solved from a past KCE quote's maintenance line). Confirm them."
+  }
+ },
+ "tech_sheet_edition": "08-2025",
+ "prices": {}
+}

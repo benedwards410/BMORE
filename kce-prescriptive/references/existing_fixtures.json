@@ -1,0 +1,25 @@
+{
+ "notes": [
+  "Audit pick list -> BGE existing device category (workbook column K) and code (column L).",
+  "category strings are copied exactly from the BGE template, trailing spaces included; tests check every entry against template_tables.json.",
+  "lamps/ballasts are used only for the proposal's maintenance-savings line (fluorescent only).",
+  "Add a fixture by finding its code on the workbook's 'Wattage Table' tab."
+ ],
+ "fixtures": {
+  "2x4-2L-F32T8":   {"label": "2x4, 2-lamp F32T8",            "category": "Four Foot Fluorescent T8 ", "code": "2F32T8NBF",    "lamps": 2, "ballasts": 1, "fluorescent": true},
+  "2x4-3L-F32T8":   {"label": "2x4, 3-lamp F32T8",            "category": "Four Foot Fluorescent T8 ", "code": "3F32T8NBF",    "lamps": 3, "ballasts": 1, "fluorescent": true},
+  "2x4-4L-F32T8":   {"label": "2x4, 4-lamp F32T8",            "category": "Four Foot Fluorescent T8 ", "code": "4F32T8NBF",    "lamps": 4, "ballasts": 1, "fluorescent": true},
+  "1x4-2L-F32T8":   {"label": "1x4 / 4 ft strip, 2-lamp F32T8", "category": "Four Foot Fluorescent T8 ", "code": "2F32T8NBF",  "lamps": 2, "ballasts": 1, "fluorescent": true},
+  "2x2-2L-F17T8":   {"label": "2x2, 2-lamp F17T8",            "category": "Two Foot Fluorescent T8",   "code": "2F17T8NBF-HE", "lamps": 2, "ballasts": 1, "fluorescent": true},
+  "2x2-3L-F17T8":   {"label": "2x2, 3-lamp F17T8",            "category": "Two Foot Fluorescent T8",   "code": "3F17T8NBF-HE", "lamps": 3, "ballasts": 1, "fluorescent": true},
+  "8ft-2L-F96T8HO": {"label": "8 ft strip, 2-lamp 86W T8 HO",  "category": "Eight Foot Fluorescent T8 ", "code": "2F86T8NBF",   "lamps": 2, "ballasts": 1, "fluorescent": true},
+  "8ft-2L-F96T8":   {"label": "8 ft strip, 2-lamp 59W T8",     "category": "Eight Foot Fluorescent T8 ", "code": "2F59T8NBF",   "lamps": 2, "ballasts": 1, "fluorescent": true},
+  "can-75W-INC":    {"label": "6 in can, 75W incandescent",    "category": "Incandescent Lamps",        "code": "1I0075",       "lamps": 1, "ballasts": 0, "fluorescent": false},
+  "can-26W-CFL":    {"label": "6 in can, 26W CFL",             "category": "Compact Fluorescents",      "code": "1C0026",       "lamps": 1, "ballasts": 1, "fluorescent": false},
+  "MH-175W":        {"label": "175W metal halide",             "category": "Metal Halide",              "code": "1MH0175S",     "lamps": 1, "ballasts": 1, "fluorescent": false},
+  "MH-250W":        {"label": "250W metal halide",             "category": "Metal Halide",              "code": "1MH0250S",     "lamps": 1, "ballasts": 1, "fluorescent": false},
+  "MH-400W":        {"label": "400W metal halide",             "category": "Metal Halide",              "code": "1MH0400S",     "lamps": 1, "ballasts": 1, "fluorescent": false},
+  "HPS-250W":       {"label": "250W high-pressure sodium",     "category": "High Pressure Sodium",      "code": "1HPS0250S",    "lamps": 1, "ballasts": 1, "fluorescent": false},
+  "HPS-400W":       {"label": "400W high-pressure sodium",     "category": "High Pressure Sodium",      "code": "1HPS0400S",    "lamps": 1, "ballasts": 1, "fluorescent": false}
+ }
+}

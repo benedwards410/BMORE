@@ -1,0 +1,158 @@
+{
+ "notes": [
+  "DLC values (dlc_id, lumens, watts, efficacy, dlc_category, primary_use) must be the DLC/ENERGY STAR 'Reported' data, copied exactly. null = not known yet: QA blocks any line that uses the product until it is filled in.",
+  "field_watts = the wattage the kit is actually set to on site. Proposal savings use it; the BGE workbook always uses the DLC-reported watts.",
+  "Prices are NOT kept here (this repo is public). Put them in config/kce.local.json under 'prices': {product id: installed price incl. sensor}, or per line as unit_price.",
+  "source says where each value came from."
+ ],
+ "fixtures": {
+  "VEKT2X4-8T": {
+   "model": "VEKT2X4/8T (25W/30W/34W)",
+   "manufacturer": "Espen Technology",
+   "dlc_id": "PAUDBY3G",
+   "lumens": 4386,
+   "watts": 34,
+   "efficacy": 129,
+   "dlc_category": "Indoor Retrofit Kit",
+   "primary_use": "Integrated Retrofit Kits for 2x4 Luminaires",
+   "measure": "RL 164",
+   "field_watts": 25,
+   "label": "25W 2x4 center-basket kit",
+   "short": "2x4 kits",
+   "cutsheet": "espen_VEKT_center_basket_retrofit_kit.pdf",
+   "source": "DLC data as entered on a submitted BGE workbook; 25W field setting from a KCE quote. Manufacturer name: confirm it matches the DLC listing."
+  },
+  "VEKT2X2-8XX": {
+   "model": "VEKT2X2-8XX (20W/25W/30W)",
+   "manufacturer": "Espen Technology",
+   "dlc_id": null,
+   "lumens": null,
+   "watts": null,
+   "efficacy": null,
+   "dlc_category": "Indoor Retrofit Kit",
+   "primary_use": "Integrated Retrofit Kits for 2x2 Luminaires",
+   "measure": "RL 163",
+   "field_watts": 20,
+   "label": "20W 2x2 center-basket kit",
+   "short": "2x2 kits",
+   "cutsheet": "espen_VEKT_center_basket_retrofit_kit.pdf",
+   "source": "Model family from the Espen VEKT spec sheet. DLC ID, lumens, watts, efficacy NOT KNOWN: look up on the DLC QPL before submitting."
+  },
+  "RCF6M9WCSTA": {
+   "model": "RCF6M9WCSTA",
+   "manufacturer": null,
+   "dlc_id": "3550188",
+   "lumens": 2300,
+   "watts": 21,
+   "efficacy": 109.5,
+   "dlc_category": "ENERGY STAR",
+   "primary_use": null,
+   "measure": "RL 172",
+   "field_watts": 21,
+   "label": "6 in LED downlight",
+   "cutsheet": null,
+   "source": "ENERGY STAR ID and data as entered on a submitted BGE workbook."
+  },
+  "KT-MSLED90PS-8": {
+   "model": "KT-MSLED90PS-8-8CSA-VDIM [Blank, Options]",
+   "manufacturer": "Keystone Technologies",
+   "dlc_id": "PJQT2B1T",
+   "lumens": 11880,
+   "watts": 90,
+   "efficacy": 132,
+   "dlc_category": null,
+   "primary_use": null,
+   "measure": "RL 111B",
+   "ft_per_fixture": 8,
+   "field_watts": 90,
+   "label": "8 ft LED strip",
+   "cutsheet": null,
+   "source": "DLC data as entered on a submitted BGE workbook. DLC category/primary use not recorded there: fill from the DLC QPL."
+  },
+  "KT-WPLED120PSHV": {
+   "model": "KT-WPLED120PSHV-L1-8CSB-VDIM [blank, -Options]",
+   "manufacturer": "Keystone Technologies",
+   "dlc_id": "S-20L7TM",
+   "lumens": 17901,
+   "watts": 118.8,
+   "efficacy": 150.75,
+   "dlc_category": null,
+   "primary_use": null,
+   "measure": "RL 153",
+   "field_watts": 118.8,
+   "label": "LED wall pack",
+   "cutsheet": null,
+   "source": "DLC data as entered on a submitted BGE workbook. DLC category/primary use not recorded there: fill from the DLC QPL."
+  },
+  "RFHB-23-185WS": {
+   "model": "RFHB/23/185WS/CS/HBD",
+   "manufacturer": null,
+   "dlc_id": null,
+   "lumens": null,
+   "watts": null,
+   "efficacy": null,
+   "dlc_category": "Indoor",
+   "primary_use": "High-Bay Luminaires for Commercial and Industrial Buildings",
+   "measure": null,
+   "field_watts": null,
+   "label": "LED high bay",
+   "cutsheet": null,
+   "source": "Model from a KCE invoice. DLC data NOT KNOWN; measure (RL 141-145) is set by its DLC lumens."
+  }
+ },
+ "controls": {
+  "IFS108": {
+   "model": "IFS108",
+   "manufacturer": "Keilton+autani",
+   "dlc_id": "NLTRC5KL0TN",
+   "control_type": "Dual Daylight / Occupancy Controls",
+   "control_select": "Dual daylight & occupancy sensor (DOS)  ",
+   "mounting": "Fixture Mounted",
+   "label": "Occupancy + daylight",
+   "cutsheet": "keilton_autani_IFS108_sensor.pdf",
+   "source": "Spec sheet SPEC-IFS108 (rev 06-10-2026); LC 111 (dual daylight/occupancy)."
+  },
+  "SILVAIR-SHARKWARD": {
+   "model": "Sharkward",
+   "nlc": {
+    "occupancy": "Yes",
+    "secondary": "Trim"
+   },
+   "manufacturer": "Silvair",
+   "dlc_id": null,
+   "control_type": "Advanced Networked Controls",
+   "control_select": "Networked lighting control",
+   "mounting": "Fixture Mounted",
+   "label": "Networked control",
+   "cutsheet": null,
+   "source": "As entered on a submitted BGE workbook (LC 101, NLC: occupancy + trim). DLC NLC listing not recorded."
+  },
+  "KEYSTONE-SMARTLOOP": {
+   "model": "Smartloop",
+   "nlc": {
+    "occupancy": "Yes",
+    "secondary": "Trim"
+   },
+   "manufacturer": "Keystone",
+   "dlc_id": null,
+   "control_type": "Advanced Networked Controls",
+   "control_select": "Networked lighting control",
+   "mounting": "Fixture Mounted",
+   "label": "Networked control",
+   "cutsheet": null,
+   "source": "As entered on a submitted BGE workbook (LC 101, NLC: occupancy + trim). DLC NLC listing not recorded."
+  },
+  "PHOTOCELL": {
+   "model": null,
+   "manufacturer": null,
+   "dlc_id": null,
+   "control_type": "Other Non-Incentivized Option",
+   "control_select": "Other control type (non-incentivized)",
+   "other_control": "New Photocell control (Exterior fixtures)",
+   "mounting": "Fixture Mounted",
+   "label": "Photocell (no incentive)",
+   "cutsheet": null,
+   "source": "BGE requires a time clock or photocell on exterior fixtures."
+  }
+ }
+}
