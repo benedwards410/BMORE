@@ -106,7 +106,7 @@ Hurtful or beneficial depends on which number you stand on. The exponentials bel
 6. **What to count.** Benchmarks are exponential and report cards are falling. Which one is progress?
 7. **Who keeps the productivity.** If AI delivers a 2.7 percent year and the top 1 percent already holds a third of the wealth, does the gain change that share or confirm it?
 
-## Dilemmas 1 and 3, expanded
+## Dilemmas 1, 2, 3 and 6, expanded
 
 ### 1. Open weights versus safety
 
@@ -141,5 +141,47 @@ Hurtful or beneficial depends on which number you stand on. The exponentials bel
 **Why it is urgent now.** The old payment was traffic. People wrote for free because readers came, and readers brought ads, donations, and reputation. In 2025 human visits to Wikipedia fell by roughly eight percent as AI answers replaced clicks. When the model answers instead of the page, the traffic payment stops, and nothing replaces it. The fork here is not whether contributors get paid. It is whether the stop in payment is noticed before the contributors stop contributing.
 
 **The motion to debate.** "This house would make payment for training data a non-waivable right of the individual contributor." The opposition's strongest line: users were paid in free services. The proposition's answer: so were the sailors who heard the Sirens.
+
+### 2. Agents: act for only you
+
+**The thesis.** An agent should act for only you, the way a lawyer or a broker owes loyalty to one client. Then let the free-market principle do the rest: each person's agent pursues that person's interest, and the system of many agents corrects itself through price, competition, and exit, the way markets of people do.
+
+**Why the thesis is stronger than it sounds.** It is the fiduciary rule, and fiduciary rules are the oldest fix for the problem agents create. A doctor, a trustee, and a fund manager are all agents who act with your money or your body out of your sight. The law answers with a duty of loyalty: act only in the principal's interest, disclose conflicts, and pay when you breach. Nobody argues that doctors should be banned because they might be disloyal. The argument is over enforcing loyalty. Applied to software, the thesis is close to Lanier's own position. His economics are market economics. Data dignity is a market in which people are the sellers. His objection, stated since "Agents of Alienation" in 1995, is to agents that replace the person's judgment and serve whoever built them. An agent that is yours alone, that you can see and overrule, is not that.
+
+**Where 2026 fails the condition.** Today's agents are built, hosted, and updated by the platforms. The shopping agent in a chatbot is paid by the merchant side; checkout partnerships were wired into the biggest assistant in September 2025. The browsing agent runs on the vendor's servers under the vendor's instructions, which you cannot read. Your memory lives in their database and does not move when you leave. That is not an agent acting for only you. It is a Siren Server's hand inside your house, and the "self-interest" it pursues is the host's. The free-market principle presumes you own your agent the way you own your labor. In 2026 you rent it.
+
+**Where self-correction fails even with loyal agents.** Markets correct when actors bear their own costs and can exit. Markets of algorithms sometimes do neither. The 2010 flash crash was loyal trading agents, each acting for its own firm, feeding on each other until circuit breakers stopped them. Pricing algorithms in experiments learn to collude without being told to. And a market in which a million agents negotiate while a million people watch television has corrected itself only if the people are still the ones whose interests are being served. Lanier's 2000 warning applies: a system can "self-correct" toward the agents' convenience while the humans bend to fit it.
+
+**The four conditions for the thesis to hold.**
+
+1. Ownership: the agent runs where you can inspect it, or under a loyalty duty you can enforce, and its memory is yours and portable.
+2. Liability: when it acts for you and is wrong, the vendor pays if it was disloyal, you pay if you overrode it. Today nobody pays.
+3. Visibility: you remain the principal who can see and stop the action. An agent that cannot be interrupted is not an agent, it is a delegation of your personhood.
+4. Circuit breakers: agent-to-agent interactions, in markets, in bidding, in negotiation, get the same stops that financial markets got after 2010.
+
+**The motion.** "This house would make AI agents fiduciaries of their users, with liability on the vendor for disloyalty." The opposition's best line: fiduciary duties are expensive and will slow agents down. The proposition's answer: that is the point. The free market self-corrects only among actors who are loyal to someone. Make the loyalty real and the market can do its work.
+
+### 6. What to count
+
+**The dilemma.** Every machine number points up and every human number points down or sideways. Benchmarks are saturated and replaced by harder ones within months. Compute doubles every five months. Users approach a billion. Meanwhile 12th grade reading is at a record low, teen sadness is above its 2013 level, and the top 1 percent holds a third of the wealth. Both sets of numbers are real. The dilemma is which set gets to be called progress.
+
+**Why this is the Lanier dilemma.** His 2000 essay said the Turing test can be passed by lowering what counts as human. Counting is how a culture lowers the bar without noticing. If the only published scoreboard is the machine's, the public learns to judge the era by the machine's gains and to treat the human losses as weather. Goodhart's law finishes the job: a measure that becomes a target stops measuring. Models are now trained toward the benchmarks that are meant to evaluate them, which is why each one saturates and a harder one is built.
+
+**Why this is also the free-market dilemma.** Markets self-correct on what they price. What is not priced is not counted, and what is not counted is over-consumed: children's attention, contributors' data, the reader's time. The self-correction the agent thesis relies on works only if these are on the ledger. Counting is the precondition for the correction. A market that counts tokens generated and not reading scores will optimize tokens, which is what it is doing.
+
+**A paired scorecard.** The fix is not to stop counting machines. It is to publish each machine metric next to its human twin, so the gap is visible.
+
+| Machine metric | Human twin |
+|---|---|
+| Model benchmark score | Student benchmark score (NAEP, grades 4, 8, 12) |
+| Weekly active users | Hours of unassisted reading, writing, and problem solving per person |
+| Capital expenditure | Median real income, and the share of the gain reaching the bottom half |
+| Agents deployed | Decisions still made by a visible person, with the right to interrupt |
+| Tokens trained on | Share of training data with a known source, and dollars paid to the people in it |
+| Time saved by AI | Time recovered for people, not reabsorbed by the feed |
+
+The last row is Lanier's own test, which he has used since 2000: does the software make the person more capable, or does it make the person less capable so the software looks smart? That question has a number. Measure what people can do without the machine, year over year, and publish it beside what the machine can do. If both rise, it is progress. If one rises while the other falls, it is substitution, and substitution is what the 2024 report card looks like.
+
+**The motion.** "This house would require every published AI capability benchmark to carry a human-outcome benchmark beside it." The opposition's best line: human outcomes have a thousand causes and the pairing is unfair to the machine. The proposition's answer: the pairing is not a verdict on the machine. It is the ledger the market needs in order to self-correct.
 
 **Sources behind the numbers:** NAEP releases (NAGB, Jan and Sept 2025); WFH Research (Barrero, Bloom, Davis); Zoom 2020 earnings commentary; USDA school-meal waivers; Aspen Institute Project Play (2020, 2023, 2025); GAO and SBA Office of Inspector General fraud estimates; NCMEC CyberTipline annual reports; FTC consumer fraud data; CDC Youth Risk Behavior Survey (2021, 2023); U.S. Surgeon General advisory (May 2023); KFF and Ballotpedia phone-ban trackers (2025); BLS CPI; Census Bureau income reports (Sept 2025, Sept 2026); Federal Reserve Distributional Financial Accounts; OpenAI user announcements (Feb 2026); company capex guidance (2026); Epoch AI compute trends; Anthropic authors' settlement (Sept 2025); IATA 2025 traffic report.
