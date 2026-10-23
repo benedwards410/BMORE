@@ -12,3 +12,15 @@ published_log.json
 .fetch.lock
 .drafts.lock
 *.tmp
+
+# KCE pipeline + intake (kce-pipeline/): live project data and local state never go to git
+kce-pipeline/projects/
+kce-pipeline/**/_reconciliation/
+kce-pipeline/**/_intake/
+kce-pipeline/out/
+kce-pipeline/regression_fixtures/Bob Bell/
+kce-pipeline/test_fixtures/Bob Bell/
+kce-pipeline/intake_state.json
+kce-pipeline/intake.lock
+__pycache__/
+*.pyc

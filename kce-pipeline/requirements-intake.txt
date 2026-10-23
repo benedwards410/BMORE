@@ -1,0 +1,8 @@
+# kce_intake runtime. The pipeline itself needs only `anthropic` (see its README).
+msal>=1.28
+msal-extensions>=1.1
+pypdf>=4.0
+requests>=2.31
+# Optional: Beacon invoice download from the QuickBooks link. Without it those
+# emails land in _needs_manual/ with the link.
+# playwright>=1.45   (then: py -m playwright install chromium)
