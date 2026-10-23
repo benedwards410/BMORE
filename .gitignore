@@ -21,6 +21,10 @@ kce-pipeline/out/
 kce-pipeline/regression_fixtures/Bob Bell/
 kce-pipeline/test_fixtures/Bob Bell/
 kce-pipeline/intake_state.json
+kce-pipeline/config/intake.json
+kce-pipeline/regression_fixtures/
+kce-pipeline/test_fixtures/
+kce-pipeline/extraction_cache/
 kce-pipeline/intake.lock
 __pycache__/
 *.pyc

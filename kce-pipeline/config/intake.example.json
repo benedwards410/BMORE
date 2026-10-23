@@ -1,11 +1,11 @@
 {
-  "_comment": "Knobs for kce_intake. No secrets live here: the sign-in token is cached under %LOCALAPPDATA%\\kce_intake, never under OneDrive.",
+  "_comment": "Copy to intake.json (git-ignored) and fill in the paths. Knobs for kce_intake. No secrets live here: the sign-in token is cached under %LOCALAPPDATA%\\kce_intake, never under OneDrive.",
 
-  "projectsRoot": "C:/Users/BenEdwards/OneDrive - KEYCRE/KCE -Document-Pipeline/projects",
+  "projectsRoot": "C:/Users/<you>/OneDrive - KEYCRE/KCE -Document-Pipeline/projects",
   "_projectsRootComment": "One folder per MTX, named '<MTX> - <slug>'. Lives in the synced SharePoint folder so Corinne sees the same files. _unmatched/ and _needs_manual/ sit beside the project folders.",
 
   "dropFolders": [
-    "C:/Users/BenEdwards/OneDrive - KEYCRE/#PIPELINE/Incoming Documents (pipeline)"
+    "C:/Users/<you>/OneDrive - KEYCRE/#PIPELINE/Incoming Documents (pipeline)"
   ],
   "_dropFoldersComment": "Anything a person saves here is picked up on the next sync. The original is left where it is; intake records its hash so it is filed once.",
 
@@ -27,7 +27,7 @@
       "docusign.net",
       "key-ce.com",
       "key-cre.com",
-      "smartsolutionsfast@gmail.com",
+      "<contractor who invoices from a personal address>@example.com",
       "beaconlightingsupply.com"
     ],
     "filenamePatterns": [

@@ -22,7 +22,7 @@ class IntakeEnv:
         self.drop.mkdir()
         self._old_home = os.environ.get("KCE_INTAKE_HOME")
         os.environ["KCE_INTAKE_HOME"] = str(self.root / "home")
-        self.cfg: Config = load_config(HELPERS.parent.parent / "config" / "intake.json", overrides={
+        self.cfg: Config = load_config(HELPERS.parent.parent / "config" / "intake.example.json", overrides={
             "projectsRoot": str(self.projects),
             "dropFolders": [str(self.drop)],
             "pipelineCommand": [sys.executable, "-I", str(HELPERS / "fake_pipeline.py")],

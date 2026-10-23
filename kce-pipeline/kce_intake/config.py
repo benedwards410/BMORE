@@ -8,6 +8,7 @@ from pathlib import Path
 
 PACKAGE_ROOT = Path(__file__).resolve().parent.parent  # the kce-pipeline/ folder
 DEFAULT_CONFIG_PATH = PACKAGE_ROOT / "config" / "intake.json"
+EXAMPLE_CONFIG_PATH = PACKAGE_ROOT / "config" / "intake.example.json"
 
 DEFAULTS: dict = {
     "projectsRoot": str(PACKAGE_ROOT / "projects"),
@@ -129,6 +130,9 @@ class Config:
 
 def load_config(path: str | os.PathLike | None = None, overrides: dict | None = None) -> Config:
     chosen = Path(path or os.environ.get("KCE_INTAKE_CONFIG") or DEFAULT_CONFIG_PATH)
+    if not chosen.exists() and chosen == DEFAULT_CONFIG_PATH:
+        raise FileNotFoundError(
+            f"{DEFAULT_CONFIG_PATH} not found. Copy {EXAMPLE_CONFIG_PATH.name} to intake.json and fill in the paths.")
     raw = dict(DEFAULTS)
     if chosen.exists():
         with open(chosen, encoding="utf-8") as fh:

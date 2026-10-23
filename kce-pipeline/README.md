@@ -40,15 +40,17 @@ Copy into this folder (`kce-pipeline/`):
 
 ```
 pipeline/kce_pipeline/        → kce_pipeline/
-pipeline/config/*.json        → config/            (intake.json is already here)
+pipeline/config/*.json        → config/            (intake.example.json is already here)
 pipeline/tests/               → tests/             (keeps test_pipeline.py beside the intake tests)
 pipeline/extraction_cache/    → extraction_cache/  (Steve's Pools entries only)
 test_fixtures/steves_pools/   → regression_fixtures/steves_pools/
 task/, README.md (→ PIPELINE_README.md), BACKLOG.md, QUICKSTART.md, kce.cmd, RUN A PROJECT.cmd, CHECK SETUP.cmd
 ```
 
-Skip `__pycache__/`, `out/`, and the **Bob Bell** fixtures — a live customer's financial documents stay
-in OneDrive only (`.gitignore` already blocks them).
+**This repo is public.** `.gitignore` keeps `regression_fixtures/`, `test_fixtures/`, `extraction_cache/`
+and every `projects/` folder out of git: real project documents, and the cache (which holds transcriptions
+of them), live in OneDrive only. The pipeline's own tests read the fixtures from disk, so they still run
+locally after the copy; they just are not shipped.
 
 Then, from `kce-pipeline/`:
 
@@ -70,6 +72,7 @@ previous report before each run, so nothing is lost meanwhile), **2** (`regressi
 
 ```bat
 cd kce-pipeline
+copy config\intake.example.json config\intake.json      :: then edit the paths; intake.json is git-ignored
 py -m pip install -r requirements-intake.txt
 py -m pip install anthropic                 :: pipeline, if not already
 rem Optional, for Beacon invoices from the QuickBooks link:
@@ -96,7 +99,7 @@ OneDrive client uploads — so no Files/Sites write permission is ever requested
 
 ---
 
-## Config: `config/intake.json`
+## Config: `config/intake.json` (copied from `intake.example.json`)
 
 | Key | Meaning |
 |---|---|
